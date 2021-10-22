@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "format": "prettier --write \"src/**/*.js\" \"src/**/*.vue\""
   },
   "dependencies": {
     "balm-ui": "^9.38.0",
@@ -22,6 +23,7 @@
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0",
     "node-sass": "^4.12.0",
+    "prettier": "^2.4.1",
     "sass-loader": "^8.0.2"
   }
 }
