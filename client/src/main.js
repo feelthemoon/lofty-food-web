@@ -1,19 +1,13 @@
-import { createApp } from 'vue';
-import App from './App.vue';
-import './registerServiceWorker';
-import router from './router';
-import store from './store';
+import Vue from 'vue'
+import App from './App.vue'
+import './registerServiceWorker'
+import router from './router'
+import store from './store'
 
-import BalmUI from 'balm-ui';
-import BalmUIPlus from 'balm-ui-plus';
-import 'balm-ui-css';
+Vue.config.productionTip = false
 
-import '@/assets/styles/main.scss';
-const app = createApp(App);
-
-app.use(BalmUI);
-app.use(BalmUIPlus);
-app.use(store);
-app.use(router);
-
-app.mount('#app');
+new Vue({
+  router,
+  store,
+  render: h => h(App)
+}).$mount('#app')
