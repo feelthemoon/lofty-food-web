@@ -60,7 +60,7 @@ export class TableParser {
 
     let index = 0;
 
-    //generate new array of objects where keys is food types and values is food objects by current day
+    //generate new array of objects with fields id, title, ..., and new field is category
     currentDayFood.forEach((item) => {
       if (!Array.isArray(item)) {
         return food.push({ ...item, category: foodTypes[index] });
