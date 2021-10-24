@@ -35,6 +35,8 @@ export class TableParser {
             id: row[0],
             title: row[1],
             price: row[3],
+            cost: 0,
+            count: 0,
           };
         }
         return row;
@@ -62,7 +64,6 @@ export class TableParser {
     currentDayFood.forEach((item) => {
       if (!Array.isArray(item)) {
         return food.push({ ...item, category: foodTypes[index] });
-
       }
       index++;
     });
