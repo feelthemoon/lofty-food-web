@@ -1,0 +1,6 @@
+
+@mixin adap($w, $t: max) {
+  @media only screen and (#{$t}-width:#{$w}px) {
+    @content;
+  }
+}
