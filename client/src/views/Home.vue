@@ -12,6 +12,7 @@
     <data-table
       :table="{ data: food(day), headers: foodData.headers }"
       :loading="loading"
+      @update-data="updateTableData"
     ></data-table>
     <v-dialog transition="dialog-bottom-transition" max-width="600">
       <template v-slot:activator="{ on, attrs }">
@@ -41,7 +42,9 @@
             <v-btn color="red accent-2" text @click="dialog.value = false"
               >Нет, подумаю ещё🤔</v-btn
             >
-            <v-btn color="green lighten-2" text>Да, уверен 😎 </v-btn>
+            <v-btn color="green lighten-2" text @click="sendTable(dialog)"
+              >Да, уверен 😎
+            </v-btn>
           </v-card-actions>
         </v-card>
       </template>
@@ -53,7 +56,7 @@
 import LayoutHeader from '@/components/Header';
 import DataTable from '@/components/Table';
 import TableLoader from '@/components/TableLoader';
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapMutations } from 'vuex';
 
 export default {
   components: {
@@ -105,6 +108,10 @@ export default {
   methods: {
     ...mapActions({
       loadTable: 'table/loadTable',
+      sendData: 'table/postTableData',
+    }),
+    ...mapMutations({
+      updateData: 'table/UPDATE_ROW',
     }),
     async updateTable(day) {
       this.day = day + 1;
@@ -113,6 +120,13 @@ export default {
         await this.loadTable({ day: this.day });
         this.loading = false;
       }
+    },
+    updateTableData(params) {
+      this.updateData({ day: this.day, data: params });
+    },
+    async sendTable(dialog) {
+      await this.sendData();
+      dialog.value = false;
     },
   },
   computed: {

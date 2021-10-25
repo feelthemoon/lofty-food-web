@@ -20,6 +20,7 @@
         class="mr-3 mb-1 mt-1 table-actions"
         small
         color="deep-purple darken-1"
+        @click="updateData('remove', item)"
       >
         -
       </v-btn>
@@ -29,6 +30,7 @@
         small
         class="mb-1 mt-1 table-actions"
         color="deep-purple darken-1"
+        @click="updateData('add', item)"
       >
         +
       </v-btn>
@@ -49,8 +51,23 @@ export default {
       type: Boolean,
     },
   },
+  methods: {
+    updateData(type, data) {
+      if (type === 'remove' && data.count > 0) {
+        this.$emit('update-data', {
+          ...data,
+          count: data.count - 1,
+          cost: (data.count - 1) * data.price,
+        });
+      } else if (type === 'add') {
+        this.$emit('update-data', {
+          ...data,
+          count: data.count + 1,
+          cost: (data.count + 1) * data.price,
+        });
+      }
+    },
+  },
   name: 'Table',
 };
 </script>
-
-<style scoped></style>

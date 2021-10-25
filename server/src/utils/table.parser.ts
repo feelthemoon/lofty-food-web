@@ -1,29 +1,44 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
-
-import xlsx from 'node-xlsx';
-import { writeFile } from 'fs';
+import { writeFile, createReadStream, existsSync, unlinkSync } from 'fs';
 import { promisify } from 'util';
+import { Cron } from '@nestjs/schedule';
+import xlsx from 'node-xlsx';
 
 const writeFilePromise = promisify(writeFile);
 
 @Injectable()
 export class TableParser {
   private table: any;
+
   constructor(private readonly httpService: HttpService) {}
+
+  @Cron('0 13 3 * * */1')
+  async downloadCron() {
+    if (existsSync(process.env.OLD_TABLE)) {
+      unlinkSync(process.env.OLD_TABLE);
+    }
+    await this.downloadFile(process.env.APP_REMOTE_URL, process.env.OLD_TABLE);
+  }
+  @Cron('0 14 3 * * */1')
+  async createTableCron() {
+    if (existsSync(process.env.NEW_TABLE)) {
+      unlinkSync(process.env.NEW_TABLE);
+    }
+    const data = xlsx.build(xlsx.parse(process.env.OLD_TABLE));
+    await writeFilePromise(process.env.NEW_TABLE, data);
+  }
 
   async downloadFile(url, outputPath) {
     const res = this.httpService.get(url, { responseType: 'arraybuffer' });
     const final = await lastValueFrom(res);
     await writeFilePromise(outputPath, Buffer.from(final.data));
-    this.readTable(process.env.OLD_TABLE);
+    await this.readTable(process.env.OLD_TABLE);
   }
 
-  readTable(table) {
-    if (!this.table) {
-      this.table = xlsx.parse(table);
-    }
+  async readTable(table) {
+    this.table = xlsx.parse(table);
   }
 
   readTableByDay(day: number) {
@@ -68,5 +83,50 @@ export class TableParser {
       index++;
     });
     return food;
+  }
+
+  async prepareTableForSend(table) {
+    const isFileExists = existsSync(process.env.NEW_TABLE);
+    if (!isFileExists) {
+      this.table = xlsx.parse(process.env.OLD_TABLE);
+      await writeFilePromise.call(
+        this,
+        process.env.NEW_TABLE,
+        xlsx.build(this.table),
+      );
+    }
+    return createReadStream(table);
+  }
+
+  async writeTable(table = this.table) {
+    await writeFilePromise.call(this, process.env.NEW_TABLE, xlsx.build(table));
+  }
+
+  async setTableData(data) {
+    // parse table which would be changing
+    const newTable = xlsx.parse(process.env.NEW_TABLE);
+
+    Object.keys(data).forEach((day) => {
+      const currentDayList = newTable[+day - 1].data;
+
+      data[day].forEach((food) => {
+        const foodPosInTable = currentDayList.findIndex(
+          (item) => item[0] === food.id,
+        );
+
+        const { count, cost } = food;
+
+        let currentFoodCount = currentDayList[foodPosInTable][4] || 0;
+        currentFoodCount += count;
+
+        currentDayList[foodPosInTable][5] += cost;
+        currentDayList[foodPosInTable][4] = currentFoodCount;
+
+        currentDayList[currentDayList.length - 5][5] = {
+          f: `SUM(F2:F${currentDayList.length - 6})`,
+        };
+      });
+    });
+    await this.writeTable(newTable);
   }
 }
