@@ -5,4 +5,7 @@ export default {
   getTable(day) {
     return baseApi.execute(routes.table(day));
   },
+  sendTable(data) {
+    return baseApi.execute(routes.sendTable, 'post', data);
+  },
 };
