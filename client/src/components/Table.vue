@@ -6,7 +6,7 @@
     :items="table.data"
     :items-per-page="25"
     :footer-props="{
-      'items-per-page-options': [10, 15, 20, -1],
+      'items-per-page-options': [10, 15, 20, -1]
     }"
     dense
   >
@@ -45,11 +45,11 @@ export default {
   props: {
     table: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
     loading: {
-      type: Boolean,
-    },
+      type: Boolean
+    }
   },
   methods: {
     updateData(type, data) {
@@ -57,17 +57,17 @@ export default {
         this.$emit('update-data', {
           ...data,
           count: data.count - 1,
-          cost: (data.count - 1) * data.price,
+          cost: (data.count - 1) * data.price
         });
       } else if (type === 'add') {
         this.$emit('update-data', {
           ...data,
           count: data.count + 1,
-          cost: (data.count + 1) * data.price,
+          cost: (data.count + 1) * data.price
         });
       }
-    },
+    }
   },
-  name: 'Table',
+  name: 'Table'
 };
 </script>

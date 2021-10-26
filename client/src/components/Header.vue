@@ -4,10 +4,10 @@
       <div class="logo">
         <img src="@/assets/static/logo.svg" alt="Lofty" />
       </div>
-      <v-menu bottom offset-y>
+      <v-menu v-if="isUser" bottom offset-y>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn color="#fff" text small v-bind="attrs" v-on="on">
-            <v-icon class="burger-icon">mdi_menu</v-icon>
+          <v-btn class="profile-btn" small v-bind="attrs" v-on="on">
+            <v-img :src="user.pic" :alt="user.username" class="avatar"></v-img>
           </v-btn>
         </template>
 
@@ -31,6 +31,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'Header',
   data() {
@@ -39,10 +41,18 @@ export default {
       links: [
         { title: 'Дашборд', src: '' },
         { title: 'Мои прошлые заказы', src: 'own' },
-        { title: 'Все заказы', src: 'all' },
-      ],
+        { title: 'Все заказы', src: 'all' }
+      ]
     };
   },
+  computed: {
+    ...mapGetters({
+      user: 'user/user'
+    }),
+    isUser() {
+      return Object.keys(this.user).length > 0;
+    }
+  }
 };
 </script>
 
