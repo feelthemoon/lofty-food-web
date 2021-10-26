@@ -109,6 +109,8 @@ export default {
     ...mapActions({
       loadTable: 'table/loadTable',
       sendData: 'table/postTableData',
+      authorization: 'authorization',
+      getUser: 'user/getUserInfo',
     }),
     ...mapMutations({
       updateData: 'table/UPDATE_ROW',
@@ -137,6 +139,14 @@ export default {
   name: 'Home',
   async created() {
     this.loading = true;
+    if(this.$route.query.code) {
+      try {
+        await this.authorization(this.$route.query.code);
+      }catch(e) {
+        await this.$router.push('/user');
+      }
+    }
+    await this.getUser();
     await this.loadTable({ day: 1 });
     this.loading = false;
   },

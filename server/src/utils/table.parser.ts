@@ -14,14 +14,14 @@ export class TableParser {
 
   constructor(private readonly httpService: HttpService) {}
 
-  @Cron('0 13 3 * * */1')
+  @Cron('0 0 3 * * */3')
   async downloadCron() {
     if (existsSync(process.env.OLD_TABLE)) {
       unlinkSync(process.env.OLD_TABLE);
     }
     await this.downloadFile(process.env.APP_REMOTE_URL, process.env.OLD_TABLE);
   }
-  @Cron('0 14 3 * * */1')
+  @Cron('0 2 3 * * */3')
   async createTableCron() {
     if (existsSync(process.env.NEW_TABLE)) {
       unlinkSync(process.env.NEW_TABLE);

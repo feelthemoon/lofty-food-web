@@ -2,11 +2,13 @@ import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { ConfigModule } from '@nestjs/config';
 import { FoodModule } from './food/food.module';
+import { UserModule } from './user/user.module';
 import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
     FoodModule,
+      UserModule,
     ConfigModule.forRoot({
       envFilePath: '.env',
     }),
