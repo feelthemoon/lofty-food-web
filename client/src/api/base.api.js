@@ -1,19 +1,18 @@
 import axios from 'axios';
 export default {
   host: process.env.VUE_APP_API_URL,
-  execute(url, method = 'get', params = {}, token = null) {
+  execute(url, method = 'get', isAuth=false, params = {}, token = null) {
     const headers = {
       'content-type': 'application/json',
       accept: 'application/json',
-      'x-requested-with': 'XMLHttpRequest',
     };
 
     if (token) {
       headers['authorization'] = token;
     }
-
+    console.log(process.env.VUE_APP_API_URL);
     const parameters = params || {};
-    const requestUrl = this.host + url;
+    const requestUrl = isAuth ? url : this.host + url;
 
     const request = {
       method: method,
