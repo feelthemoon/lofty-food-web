@@ -9,9 +9,9 @@ Vue.use(Vuetify);
 export default new Vuetify({
   lang: {
     locales: { ru },
-    current: 'ru',
+    current: 'ru'
   },
   icons: {
-    iconfont: 'mdi',
-  },
+    iconfont: 'mdi'
+  }
 });

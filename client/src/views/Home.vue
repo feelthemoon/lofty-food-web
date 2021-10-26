@@ -1,6 +1,5 @@
 <template>
   <v-main class="main mb-8">
-    <layout-header></layout-header>
     <v-tabs class="mt-5 mb-5" color="deep-purple accent-4" centered>
       <v-tab
         @click="updateTable(index)"
@@ -53,16 +52,14 @@
 </template>
 
 <script>
-import LayoutHeader from '@/components/Header';
 import DataTable from '@/components/Table';
 import TableLoader from '@/components/TableLoader';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 
 export default {
   components: {
-    LayoutHeader,
     DataTable,
-    TableLoader,
+    TableLoader
   },
   data() {
     return {
@@ -70,39 +67,39 @@ export default {
         headers: [
           {
             text: 'id',
-            value: 'id',
+            value: 'id'
           },
           {
             text: 'Название',
             value: 'title',
-            align: 'center',
+            align: 'center'
           },
           {
             text: 'Категория',
             value: 'category',
-            align: 'center',
+            align: 'center'
           },
           {
             text: 'Цена',
-            value: 'price',
+            value: 'price'
           },
           {
             text: 'Количество',
-            value: 'count',
+            value: 'count'
           },
           {
             text: 'Стоимость',
-            value: 'cost',
+            value: 'cost'
           },
           {
             text: '',
-            value: 'actions',
-          },
-        ],
+            value: 'actions'
+          }
+        ]
       },
       tabs: ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница'],
       day: 1,
-      loading: true,
+      loading: true
     };
   },
   methods: {
@@ -110,10 +107,10 @@ export default {
       loadTable: 'table/loadTable',
       sendData: 'table/postTableData',
       authorization: 'authorization',
-      getUser: 'user/getUserInfo',
+      getUser: 'user/getUserInfo'
     }),
     ...mapMutations({
-      updateData: 'table/UPDATE_ROW',
+      updateData: 'table/UPDATE_ROW'
     }),
     async updateTable(day) {
       this.day = day + 1;
@@ -129,26 +126,30 @@ export default {
     async sendTable(dialog) {
       await this.sendData();
       dialog.value = false;
-    },
+    }
   },
   computed: {
     ...mapGetters({
       food: 'table/food',
-    }),
+      user: 'user/user'
+    })
   },
   name: 'Home',
   async created() {
     this.loading = true;
-    if(this.$route.query.code) {
+    if (this.$route.query.code) {
       try {
         await this.authorization(this.$route.query.code);
-      }catch(e) {
-        await this.$router.push('/user');
+      } catch (e) {
+        await this.$router.push({ name: 'Auth' });
       }
     }
     await this.getUser();
+    if (!Object.keys(this.user).length) {
+      await this.$router.push({ name: 'Auth' });
+    }
     await this.loadTable({ day: 1 });
     this.loading = false;
-  },
+  }
 };
 </script>

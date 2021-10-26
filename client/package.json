@@ -5,7 +5,7 @@
   "scripts": {
     "build": "clear && vue-cli-service build",
     "format": "prettier --write \"src/**/*.js\" \"src/**/*.vue\"",
-    "dev": "vue-cli-service serve"
+    "dev": "clear && vue-cli-service serve"
   },
   "dependencies": {
     "add": "^2.0.6",

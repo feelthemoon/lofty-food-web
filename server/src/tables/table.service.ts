@@ -9,20 +9,20 @@ import xlsx from 'node-xlsx';
 const writeFilePromise = promisify(writeFile);
 
 @Injectable()
-export class TableParser {
+export class TableService {
   private table: any;
 
   constructor(private readonly httpService: HttpService) {}
 
-  @Cron('0 0 3 * * */3')
-  async downloadCron() {
+  @Cron('0 0 12 * * */4')
+  private async downloadCron() {
     if (existsSync(process.env.OLD_TABLE)) {
       unlinkSync(process.env.OLD_TABLE);
     }
     await this.downloadFile(process.env.APP_REMOTE_URL, process.env.OLD_TABLE);
   }
-  @Cron('0 2 3 * * */3')
-  async createTableCron() {
+  @Cron('0 2 12 * * */4')
+  private async createTableCron() {
     if (existsSync(process.env.NEW_TABLE)) {
       unlinkSync(process.env.NEW_TABLE);
     }
@@ -42,7 +42,7 @@ export class TableParser {
   }
 
   readTableByDay(day: number) {
-    // parse from table all data what we need by current day
+    // parse from tables all data what we need by current day
     let currentDayFood = this.table[day - 1].data
       .map((row) => {
         if (typeof row[1] === 'string' && typeof row[3] === 'number') {
@@ -58,7 +58,7 @@ export class TableParser {
       })
       .slice(2, -5);
 
-    // define food types like in table
+    // define tables types like in tables
     const foodTypes = currentDayFood
       .map((item) => {
         if (Array.isArray(item)) {
@@ -98,12 +98,12 @@ export class TableParser {
     return createReadStream(table);
   }
 
-  async writeTable(table = this.table) {
+  private async writeTable(table = this.table) {
     await writeFilePromise.call(this, process.env.NEW_TABLE, xlsx.build(table));
   }
 
   async setTableData(data) {
-    // parse table which would be changing
+    // parse tables which would be changing
     const newTable = xlsx.parse(process.env.NEW_TABLE);
 
     Object.keys(data).forEach((day) => {

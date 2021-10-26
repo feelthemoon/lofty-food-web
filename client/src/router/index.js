@@ -7,19 +7,32 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () => import(/* webpackChunkName: "home" */ '@/views/Home'),
+    component: () => import(/* webpackChunkName: "home" */ '@/views/Home')
   },
   {
     path: '/auth',
     name: 'Auth',
-    component: () => import(/* webpackChunkName: "home" */ '@/views/Auth'),
-  },
+    component: () => import(/* webpackChunkName: "home" */ '@/views/Auth')
+  }
 ];
 
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes,
+  routes
 });
 
+const restrictedPaths = ['/', '/users', '/orders'];
+
+router.beforeEach((to, from, next) => {
+  if (
+    restrictedPaths.includes(to.path) &&
+    !localStorage.getItem('auth') &&
+    !to.query.code
+  ) {
+    next({ name: 'Auth' });
+  } else {
+    next();
+  }
+});
 export default router;
