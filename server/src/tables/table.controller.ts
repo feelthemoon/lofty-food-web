@@ -6,7 +6,7 @@ import { TableService } from './table.service';
 @Controller()
 export class TableController {
   constructor(private readonly tableService: TableService) {}
-  @Get('/tables/:day')
+  @Get('/table/:day')
   async getTableForClient(@Req() req: Request, @Res() res: Response) {
     try {
       await this.tableService.readTable(process.env.OLD_TABLE);

@@ -23,7 +23,7 @@
             v-on="on"
           >
             <span>Отправить заказ</span>
-            <v-icon class="send-icon" left small>fa_send</v-icon>
+<!--            <v-icon class="send-icon" left small>fa_send</v-icon>-->
           </v-btn>
         </div>
       </template>
@@ -106,7 +106,7 @@ export default {
     ...mapActions({
       loadTable: 'table/loadTable',
       sendData: 'table/postTableData',
-      authorization: 'authorization',
+      authorization: 'auth/authorization',
       getUser: 'user/getUserInfo'
     }),
     ...mapMutations({
