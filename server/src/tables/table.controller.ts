@@ -2,10 +2,14 @@ import { Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { Request, Response } from 'express';
 
 import { TableService } from './table.service';
+import { UsersService } from '../users/users.service';
 
 @Controller()
 export class TableController {
-  constructor(private readonly tableService: TableService) {}
+  constructor(
+    private readonly tableService: TableService,
+    private readonly usersService: UsersService,
+  ) {}
   @Get('/table/:day')
   async getTableForClient(@Req() req: Request, @Res() res: Response) {
     try {
@@ -20,6 +24,10 @@ export class TableController {
   @Post('/postdata')
   async setTableData(@Req() req: Request, @Res() res: Response) {
     try {
+      await this.usersService.setUserOrders(
+        req.headers.authorization,
+        req.body,
+      );
       await this.tableService.setTableData(req.body);
       res.status(200).json({ message: 'ok' });
     } catch (e) {
