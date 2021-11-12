@@ -3,10 +3,10 @@ import { DataTypes } from 'sequelize';
 
 interface IUser {
   id: string;
-  username: string;
-  orders: DataTypes.ArrayDataType<any>;
+  email: string;
+  orders: any;
   final_sum: number;
-  days_sum: DataTypes.ArrayDataType<any>;
+  days_sum: any;
 }
 
 @Table({ tableName: 'Users' })
@@ -14,11 +14,11 @@ export class User extends Model<User, IUser> {
   @Column({ type: DataType.STRING, unique: true, primaryKey: true })
   id: string;
   @Column({ type: DataType.STRING, allowNull: false })
-  username: string;
+  email: string;
   @Column({ type: DataType.ARRAY(DataTypes.JSON), allowNull: false })
-  orders: DataTypes.ArrayDataType<any>;
+  orders: any;
   @Column({ type: DataType.INTEGER, allowNull: false })
   final_sum: number;
   @Column({ type: DataType.ARRAY(DataTypes.JSON), allowNull: false })
-  days_sum: DataTypes.ArrayDataType<any>;
+  days_sum: any;
 }

@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TableModule } from './tables/table.module';
 import { UsersModule } from './users/users.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import {User} from "./models/user.model";
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { ScheduleModule } from '@nestjs/schedule';
       password: process.env.PG_PASS,
       database: process.env.PG_DB,
       autoLoadModels: true,
-      models: [],
+      models: [User],
     }),
   ],
 })
