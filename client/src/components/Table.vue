@@ -58,13 +58,13 @@ export default {
           ...data,
           count: data.count - 1,
           cost: (data.count - 1) * data.price
-        });
+        }, type);
       } else if (type === 'add') {
         this.$emit('update-data', {
           ...data,
           count: data.count + 1,
           cost: (data.count + 1) * data.price
-        });
+        }, type);
       }
     }
   },
