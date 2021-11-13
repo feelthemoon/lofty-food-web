@@ -69,6 +69,12 @@ a {
       font-weight: 600!important;
     }
   }
+  &__footer{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    max-width: 970px;
+  }
 }
 
 .v-slide-group__prev {

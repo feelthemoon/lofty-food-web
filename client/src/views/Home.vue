@@ -13,7 +13,9 @@
       :loading="loading"
       @update-data="updateTableData"
     ></data-table>
-    <v-dialog transition="dialog-bottom-transition" max-width="600">
+    <div class="main__footer">
+      <span>Итоговая сумма: {{ finalSum }}</span>
+      <v-dialog transition="dialog-bottom-transition" max-width="600">
       <template v-slot:activator="{ on, attrs }">
         <div class="approve">
           <v-btn
@@ -48,6 +50,7 @@
         </v-card>
       </template>
     </v-dialog>
+    </div>
   </v-main>
 </template>
 
@@ -99,7 +102,8 @@ export default {
       },
       tabs: ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница'],
       day: 1,
-      loading: true
+      loading: true,
+      finalSum: 0,
     };
   },
   methods: {
@@ -120,7 +124,8 @@ export default {
         this.loading = false;
       }
     },
-    updateTableData(params) {
+    updateTableData(params, type) {
+      ((type === 'add') && (this.finalSum += params.price)) || (this.finalSum -= params.price)
       this.updateData({ day: this.day, data: params });
     },
     async sendTable(dialog) {
