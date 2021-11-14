@@ -47,9 +47,16 @@ export class UsersService {
     return  this.users.create({
       id: this.decodeJWT(token).sub,
       email: this.decodeJWT(token).email,
+      name: this.decodeJWT(token).name,
       final_sum,
       days_sum,
       orders,
+    });
+  }
+
+  async getAllUsers() {
+    return this.users.findAll({
+      raw: true
     });
   }
 }

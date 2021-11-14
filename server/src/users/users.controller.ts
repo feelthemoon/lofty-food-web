@@ -16,4 +16,15 @@ export class UsersController {
       await res.status(500).json({ message: 'Wrong data' });
     }
   }
+  
+  @Get('/all')
+  async getAllUsers(@Req() req: Request, @Res() res: Response){
+    try {
+      const users = await this.userService.getAllUsers();
+      await res.status(200).json(users);
+    }catch (e) {
+      console.log(e);
+      await res.status(500).json({ message: 'Wrong data' });
+    }
+  }
 }

@@ -2,7 +2,7 @@
   <div class="auth">
     <h3>Заходи и забирай свое хрючево!😃</h3>
     <a
-      href="https://slack.com/openid/connect/authorize?scope=openid%20email%20profile&amp;response_type=code&amp;redirect_uri=https%3A%2F%2Fa6c9-95-72-86-225.ngrok.io%2F&amp;client_id=14172408775.2637076670294"
+      href="https://slack.com/openid/connect/authorize?scope=openid%20email%20profile&amp;response_type=code&amp;redirect_uri=https%3A%2F%2F09e6-95-72-86-225.ngrok.io%2F&amp;client_id=14172408775.2637076670294"
       style="
         align-items: center;
         color: #fff !important;
