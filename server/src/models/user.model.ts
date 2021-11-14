@@ -3,6 +3,7 @@ import { DataTypes } from 'sequelize';
 
 interface IUser {
   id: string;
+  name: string;
   email: string;
   orders: any;
   final_sum: number;
@@ -15,6 +16,8 @@ export class User extends Model<User, IUser> {
   id: string;
   @Column({ type: DataType.STRING, allowNull: false })
   email: string;
+  @Column({ type: DataType.STRING, allowNull: false })
+  name: string;
   @Column({ type: DataType.ARRAY(DataTypes.JSON), allowNull: false })
   orders: any;
   @Column({ type: DataType.INTEGER, allowNull: false })

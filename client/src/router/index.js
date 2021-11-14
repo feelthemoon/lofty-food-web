@@ -13,6 +13,11 @@ const routes = [
     path: '/auth',
     name: 'Auth',
     component: () => import(/* webpackChunkName: "home" */ '@/views/Auth')
+  },
+  {
+    path: '/all',
+    name: 'All',
+    component: () => import(/* webpackChunkName: "all" */ '@/views/All')
   }
 ];
 
@@ -22,7 +27,7 @@ const router = new VueRouter({
   routes
 });
 
-const restrictedPaths = ['/', '/users', '/orders'];
+const restrictedPaths = ['/', '/all', '/orders'];
 
 router.beforeEach((to, from, next) => {
   if (

@@ -12,18 +12,12 @@
         </template>
 
         <v-list>
-          <v-list-item-group
-            v-model="selectedLink"
-            color="deep-purple darken-3"
-          >
             <v-list-item
-              exact-active-class="link-active"
               v-for="(link, index) in links"
               :key="index"
             >
-              <router-link :to="`/${link.src}`">{{ link.title }}</router-link>
+              <router-link class="header__link" exact exact-active-class="link-active" :to="`/${link.src}`">{{ link.title }}</router-link>
             </v-list-item>
-          </v-list-item-group>
         </v-list>
       </v-menu>
     </div>
@@ -52,7 +46,8 @@ export default {
     isUser() {
       return Object.keys(this.user).length > 0;
     }
-  }
+  },
+
 };
 </script>
 

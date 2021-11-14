@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import DataTable from '@/components/Table';
+import DataTable from '@/components/TableFood';
 import TableLoader from '@/components/TableLoader';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 

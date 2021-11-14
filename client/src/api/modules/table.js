@@ -7,5 +7,8 @@ export default {
   },
   sendTable(data, token) {
     return baseApi.execute(routes.sendTable, 'post', false, data, token);
+  },
+  usersTable(token) {
+    return baseApi.execute(routes.users, 'get', false, {}, token);
   }
 };

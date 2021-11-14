@@ -13,6 +13,9 @@ export default {
   },
   mutations: {
     UPDATE_DATA(state, params) {
+      if (params.namespace === 'users') {
+        return state.table.users.data = params.data;
+      }
       if (!state.table[params.namespace][params.day] && params.day) {
         Vue.set(state.table[params.namespace], params.day, params.data);
       } else {
@@ -48,7 +51,16 @@ export default {
         });
       });
       return table;
-    }
+    },
+    users: state => {
+      if (state.table.users.data.length) {
+        return state.table.users.data.map(user => ({
+          ...user,
+          createdAt: user.createdAt.split('T')[0].split('-').reverse().join('.')
+        }));
+      }
+      return [];
+    },
   },
   actions: {
     async loadTable({ commit, rootGetters }, params) {
@@ -67,7 +79,20 @@ export default {
       try {
         await api.sendTable(getters.tableForSend, rootGetters.token);
         commit('RESET_TABLE');
-      } catch (e) {}
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    async loadUsersTable({commit, rootGetters}) {
+      try {
+        const res = await api.usersTable(rootGetters.token);
+        commit('UPDATE_DATA', {
+          namespace: 'users',
+          data: res.data
+        })
+      }catch (e) {
+        console.log(e);
+      }
     }
   }
 };
