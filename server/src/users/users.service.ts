@@ -5,7 +5,6 @@ import * as jwt from 'jsonwebtoken';
 import { User } from '../models/user.model';
 import {Cron} from "@nestjs/schedule";
 
-
 @Injectable()
 export class UsersService {
   constructor(@InjectModel(User) private users: typeof User) {}
@@ -63,7 +62,7 @@ export class UsersService {
       );
     }
 
-    return  this.users.create({
+    return this.users.create({
       id: this.decodeJWT(token).sub,
       email: this.decodeJWT(token).email,
       name: this.decodeJWT(token).name,
@@ -75,7 +74,7 @@ export class UsersService {
 
   async getAllUsers() {
     return this.users.findAll({
-      raw: true
+      raw: true,
     });
   }
 }

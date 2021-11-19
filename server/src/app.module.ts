@@ -4,7 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TableModule } from './tables/table.module';
 import { UsersModule } from './users/users.module';
 import { ScheduleModule } from '@nestjs/schedule';
-import {User} from "./models/user.model";
+import { User } from './models/user.model';
 
 @Module({
   imports: [
