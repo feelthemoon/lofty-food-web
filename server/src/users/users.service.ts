@@ -3,11 +3,30 @@ import { InjectModel } from '@nestjs/sequelize';
 import * as jwt from 'jsonwebtoken';
 
 import { User } from '../models/user.model';
+import {Cron} from "@nestjs/schedule";
 
 
 @Injectable()
 export class UsersService {
   constructor(@InjectModel(User) private users: typeof User) {}
+
+  @Cron('0 00 05 * * */4')
+  private async resetUsersDaysSum() {
+    const users = await this.users.findAll({
+      raw: true
+    })
+    for (const user of users) {
+      await this.users.update({
+        days_sum: [0, 0, 0, 0, 0],
+        final_sum: 0,
+        orders: [],
+      }, {
+        where: {
+          id: user.id
+        }
+      });
+    }
+  }
 
   decodeJWT(token) {
     return jwt.decode(token, {
