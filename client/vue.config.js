@@ -1,11 +1,13 @@
 module.exports = {
+  transpileDependencies: [
+    'vuetify'
+  ],
   runtimeCompiler: true,
-  configureWebpack: {
-    resolve: {
-      alias: {
-        "balm-ui-plus": "balm-ui/dist/balm-ui-plus.js",
-        "balm-ui-css": "balm-ui/dist/balm-ui.css",
+  css: {
+    loaderOptions: {
+      sass: {
+        implementation: require('sass'),
       },
     },
-  },
-};
+  }
+}
