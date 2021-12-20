@@ -14,7 +14,8 @@ export class TableService {
 
   constructor(private readonly httpService: HttpService) {}
 
-  @Cron('0 00 17 * * */4')
+
+  @Cron('0 00 15 * * */4')
   private async downloadCron() {
     if (existsSync(process.env.OLD_TABLE)) {
       unlinkSync(process.env.OLD_TABLE);
