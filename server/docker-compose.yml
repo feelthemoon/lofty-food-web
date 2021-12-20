@@ -6,12 +6,12 @@ services:
     build:
       context: .
     env_file:
-      - .env
+      - .env.prod
     volumes:
       - .:/app
       - /app/node_modules
     ports:
-      - 8000:8000
+      - 8001:8001
       - 9229:9229
     command: yarn run start:dev
     depends_on:
@@ -21,7 +21,7 @@ services:
     container_name: postgres
     image: postgres:14
     env_file:
-      - .env
+      - .env.prod
     environment:
       PG_DATA: /var/lib/postgresql/data
     ports:

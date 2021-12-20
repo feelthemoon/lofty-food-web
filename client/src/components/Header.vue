@@ -34,7 +34,6 @@ export default {
       selectedLink: 0,
       links: [
         { title: 'Дашборд', src: '' },
-        { title: 'Мои прошлые заказы', src: 'own' },
         { title: 'Все заказы', src: 'all' }
       ]
     };
