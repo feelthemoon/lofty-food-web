@@ -5,11 +5,14 @@ import { TableModule } from './tables/table.module';
 import { UsersModule } from './users/users.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { User } from './models/user.model';
+import {OrderModel} from "./models/order.model";
+import {OrdersModule} from "./orders/orders.module";
 
 @Module({
   imports: [
     TableModule,
     UsersModule,
+      OrdersModule,
     ConfigModule.forRoot({
       envFilePath: '.env',
     }),
@@ -22,7 +25,7 @@ import { User } from './models/user.model';
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
       autoLoadModels: true,
-      models: [User],
+      models: [User, OrderModel],
     }),
   ],
 })
