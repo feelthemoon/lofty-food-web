@@ -10,7 +10,7 @@ export class TableController {
     private readonly tableService: TableService,
     private readonly usersService: UsersService,
   ) {}
-  @Get('/table/:day')
+  @Get('api/table/:day')
   async getTableForClient(@Req() req: Request, @Res() res: Response) {
     try {
       await this.tableService.readTable(process.env.OLD_TABLE);
@@ -21,7 +21,7 @@ export class TableController {
     }
   }
 
-  @Post('/postdata')
+  @Post('api/postdata')
   async setTableData(@Req() req: Request, @Res() res: Response) {
     try {
       await this.usersService.setUserOrders(
