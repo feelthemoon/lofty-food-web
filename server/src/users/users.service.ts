@@ -3,29 +3,12 @@ import { InjectModel } from '@nestjs/sequelize';
 import * as jwt from 'jsonwebtoken';
 
 import { User } from '../models/user.model';
-import {Cron} from "@nestjs/schedule";
+import {OrderModel} from "../models/order.model";
+import {OrdersService} from "../orders/orders.service";
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User) private users: typeof User) {}
-
-  @Cron('0 00 05 * * */4')
-  private async resetUsersDaysSum() {
-    const users = await this.users.findAll({
-      raw: true
-    })
-    for (const user of users) {
-      await this.users.update({
-        days_sum: [0, 0, 0, 0, 0],
-        final_sum: 0,
-        orders: [],
-      }, {
-        where: {
-          id: user.id
-        }
-      });
-    }
-  }
+  constructor(@InjectModel(User) private users: typeof User, private readonly orderService: OrdersService) {}
 
   decodeJWT(token) {
     return jwt.decode(token, {
@@ -33,48 +16,29 @@ export class UsersService {
     });
   }
 
-  async setUserOrders(token, order) {
-    const user = await this.users.findOne(this.decodeJWT(token).email);
-    const days_sum = user?.days_sum || new Array(5).fill(0);
-    const orders = user?.orders || [];
-    let final_sum = user?.final_sum || 0;
-
-    Object.keys(order).forEach((key) => {
-      order[key].forEach((food) => {
-        days_sum[+key - 1] += food.cost;
-        final_sum += food.cost;
-        orders.push(food);
-      });
-    });
-
-    if (user) {
-      return this.users.update(
-        {
-          final_sum,
-          orders,
-          days_sum,
-        },
-        {
-          where: {
-            id: user.id,
-          },
-        },
-      );
+  async create(token) {
+    const decodedToken = this.decodeJWT(token);
+    const user = await this.users.findOne({where: {
+      slack_id: decodedToken["https://slack.com/user_id"]
+    }});
+    if (!user) {
+      return await this.users.create({
+        slack_id: decodedToken["https://slack.com/user_id"],
+        email: decodedToken.email,
+        name: decodedToken.name
+      })
     }
-
-    return this.users.create({
-      id: this.decodeJWT(token).sub,
-      email: this.decodeJWT(token).email,
-      name: this.decodeJWT(token).name,
-      final_sum,
-      days_sum,
-      orders,
-    });
+    return user;
   }
+  async getAllOrders () {
+    const users = await this.users.findAll({raw: true})
 
-  async getAllUsers() {
-    return this.users.findAll({
-      raw: true,
-    });
+    for (const user of users) {
+      user.orders = [];
+      const order = await this.orderService.find(user.id);
+      // @ts-ignore
+      user.orders.push(order);
+    }
+    return users;
   }
 }
