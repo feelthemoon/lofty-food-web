@@ -3,7 +3,6 @@ import { InjectModel } from '@nestjs/sequelize';
 import * as jwt from 'jsonwebtoken';
 
 import { User } from '../models/user.model';
-import {OrderModel} from "../models/order.model";
 import {OrdersService} from "../orders/orders.service";
 
 @Injectable()
@@ -31,14 +30,13 @@ export class UsersService {
     return user;
   }
   async getAllOrders () {
-    const users = await this.users.findAll({raw: true})
+    const orders = await this.orderService.getAll()
 
-    for (const user of users) {
-      user.orders = [];
-      const order = await this.orderService.find(user.id);
+    for (const order of orders) {
       // @ts-ignore
-      user.orders.push(order);
+      order.user = {};
+      order.user = await this.users.findOne({ where: {id: order.userId}});
     }
-    return users;
+    return orders;
   }
 }

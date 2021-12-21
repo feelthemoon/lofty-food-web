@@ -1,14 +1,24 @@
 import {Injectable} from "@nestjs/common";
 import {InjectModel} from "@nestjs/sequelize";
 import {OrderModel} from "../models/order.model";
+import {Cron} from "@nestjs/schedule";
 
 @Injectable()
 export class OrdersService {
+    @Cron('0 00 8 * * */4')
+    private async resetTableOrders() {
+        await this.orders.destroy({
+            where: {},
+            truncate: true
+        })
+    }
     constructor(@InjectModel(OrderModel) private readonly orders: typeof OrderModel) {}
     async find(id: number) {
         return await this.orders.findOne({where: {userId: id}});
     }
-
+    async getAll() {
+        return await this.orders.findAll({raw: true});
+    }
     async create(order, user) {
         const foundOrder = await this.orders.findOne({where: {userId: user.id}});
 
