@@ -8,20 +8,20 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    token: localStorage.getItem('auth') || null
+    token: localStorage.getItem('auth') || null,
   },
   mutations: {
     SET_TOKEN(state, token) {
       state.token = token;
       localStorage.setItem('auth', token);
-    }
+    },
   },
   getters: {
-    token: state => state.token
+    token: state => state.token,
   },
   modules: {
     table,
     auth,
-    user
-  }
+    user,
+  },
 });

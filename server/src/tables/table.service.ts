@@ -5,6 +5,7 @@ import { writeFile, createReadStream, existsSync, unlinkSync } from 'fs';
 import { promisify } from 'util';
 import { Cron } from '@nestjs/schedule';
 import xlsx from 'node-xlsx';
+import * as path from 'path';
 
 const writeFilePromise = promisify(writeFile);
 
@@ -13,7 +14,6 @@ export class TableService {
   private table: any;
 
   constructor(private readonly httpService: HttpService) {}
-
 
   @Cron('0 00 15 * * */4')
   private async downloadCron() {
@@ -30,7 +30,9 @@ export class TableService {
     const data = xlsx.build(xlsx.parse(process.env.OLD_TABLE));
     await writeFilePromise(process.env.NEW_TABLE, data);
   }
-
+  downloadParams() {
+    return path.resolve(__dirname, '../../data/table.xlsx');
+  }
   async downloadFile(url, outputPath) {
     const res = this.httpService.get(url, { responseType: 'arraybuffer' });
     const final = await lastValueFrom(res);

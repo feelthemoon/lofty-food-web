@@ -6,7 +6,7 @@
     :items="table.data"
     :items-per-page="25"
     :footer-props="{
-      'items-per-page-options': [10, 15, 20, -1]
+      'items-per-page-options': [10, 15, 20, -1],
     }"
     dense
   >
@@ -45,29 +45,37 @@ export default {
   props: {
     table: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     loading: {
-      type: Boolean
-    }
+      type: Boolean,
+    },
   },
   methods: {
     updateData(type, data) {
       if (type === 'remove' && data.count > 0) {
-        this.$emit('update-data', {
-          ...data,
-          count: data.count - 1,
-          cost: (data.count - 1) * data.price
-        }, type);
+        this.$emit(
+          'update-data',
+          {
+            ...data,
+            count: data.count - 1,
+            cost: (data.count - 1) * data.price,
+          },
+          type,
+        );
       } else if (type === 'add') {
-        this.$emit('update-data', {
-          ...data,
-          count: data.count + 1,
-          cost: (data.count + 1) * data.price
-        }, type);
+        this.$emit(
+          'update-data',
+          {
+            ...data,
+            count: data.count + 1,
+            cost: (data.count + 1) * data.price,
+          },
+          type,
+        );
       }
-    }
+    },
   },
-  name: 'Table'
+  name: 'Table',
 };
 </script>

@@ -16,14 +16,5 @@ export class UsersController {
             await res.status(500).json({ message: 'Wrong data' });
         }
     }
-    @Get('api/all')
-    async getAllUsers(@Req() req: Request, @Res() res: Response) {
-        try {
-            const orders = await this.userService.getAllOrders();
-            await res.status(200).json(orders);
-        } catch (e) {
-            console.log(e);
-            await res.status(500).json({ message: 'Wrong data' });
-        }
-    }
+  }
 }

@@ -7,12 +7,12 @@ export default {
       try {
         const res = await auth(code);
         if (res.data.id_token) {
-          console.log('ok')
+          console.log('ok');
           commit('SET_TOKEN', res.data.id_token, { root: true });
         }
       } catch (e) {
         console.log(e);
       }
-    }
-  }
+    },
+  },
 };

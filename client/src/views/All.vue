@@ -1,15 +1,18 @@
 <template>
   <v-main class="main mb-8">
-   <orders-table :table="{headers: ordersData.headers, data: users}" :loading="loading"></orders-table>
+    <orders-table
+      :table="{ headers: ordersData.headers, data: orders }"
+      :loading="loading"
+    ></orders-table>
   </v-main>
 </template>
 
 <script>
-import OrdersTable from "@/components/TableOrders";
-import {mapActions, mapGetters} from "vuex";
+import OrdersTable from '@/components/TableOrders';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
-  name: "All",
+  name: 'All',
   components: {
     OrdersTable,
   },
@@ -19,57 +22,59 @@ export default {
         headers: [
           {
             text: 'slack_id',
-            value: 'id'
+            value: 'slack_id',
           },
           {
             text: 'Имя',
             value: 'name',
-            align: 'center'
+            align: 'center',
           },
           {
             text: 'Email',
             value: 'email',
-            align: 'center'
+            align: 'center',
           },
           {
             text: 'Заказ(пн, вт, ср, чт, пт)',
-            value: 'days_sum'
+            value: 'days_sum',
           },
           {
             text: 'Финальная стоимость',
-            value: 'final_sum'
+            value: 'final_sum',
           },
           {
             text: 'Дата заказа',
-            value: 'createdAt'
+            value: 'createdAt',
           },
-        ]
+          {
+            text: '',
+            value: 'actions',
+          },
+        ],
       },
       loading: true,
-    }
+    };
   },
   computed: {
     ...mapGetters({
-      users: 'table/users',
-      user: 'user/user'
-    })
+      orders: 'table/orders',
+      user: 'user/user',
+    }),
   },
   methods: {
     ...mapActions({
-      loadUsers: "table/loadUsersTable",
+      loadUsers: 'table/loadUsersTable',
       loadUser: 'user/getUserInfo',
-    })
+    }),
   },
-  async created(){
-    if (!Object.keys(this.user).length){
+  async created() {
+    if (!Object.keys(this.user).length) {
       await this.loadUser();
     }
     await this.loadUsers();
     this.loading = false;
-  }
-}
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

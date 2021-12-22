@@ -4,7 +4,7 @@ export default {
   execute(url, method = 'get', isAuth = false, params = {}, token = null) {
     const headers = {
       'content-type': 'application/json',
-      accept: 'application/json'
+      accept: 'application/json',
     };
 
     if (token) {
@@ -16,7 +16,7 @@ export default {
     const request = {
       method: method,
       url: requestUrl,
-      headers
+      headers,
     };
 
     if (method === 'get') {
@@ -26,5 +26,5 @@ export default {
     }
 
     return axios(request);
-  }
+  },
 };
