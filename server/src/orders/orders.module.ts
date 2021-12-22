@@ -12,3 +12,4 @@ import { OrdersController } from './orders.controller';
   providers: [OrdersService, UsersService],
 })
 export class OrdersModule {}
+

@@ -12,3 +12,4 @@ COPY . .
 COPY ./dist ./dist
 
 CMD ["yarn", "build", "start", "prod"]
+
