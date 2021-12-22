@@ -54,7 +54,7 @@ export default {
     } else {
       next();
     }
-  }
+  },
 };
 </script>
 

@@ -5,14 +5,14 @@ import { TableModule } from './tables/table.module';
 import { UsersModule } from './users/users.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { User } from './models/user.model';
-import {OrderModel} from "./models/order.model";
-import {OrdersModule} from "./orders/orders.module";
+import { OrderModel } from './models/order.model';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
     TableModule,
     UsersModule,
-      OrdersModule,
+    OrdersModule,
     ConfigModule.forRoot({
       envFilePath: '.env',
     }),

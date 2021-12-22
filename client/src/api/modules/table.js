@@ -10,5 +10,5 @@ export default {
   },
   usersTable(token) {
     return baseApi.execute(routes.users, 'get', false, {}, token);
-  }
+  },
 };

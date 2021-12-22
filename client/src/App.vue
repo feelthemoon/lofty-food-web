@@ -11,7 +11,7 @@ import LayoutHeader from '@/components/Header';
 export default {
   name: 'App',
   components: {
-    LayoutHeader
-  }
+    LayoutHeader,
+  },
 };
 </script>

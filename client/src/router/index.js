@@ -7,27 +7,27 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () => import(/* webpackChunkName: "home" */ '@/views/Home')
+    component: () => import(/* webpackChunkName: "home" */ '@/views/Home'),
   },
   {
     path: '/auth',
     name: 'Auth',
-    component: () => import(/* webpackChunkName: "home" */ '@/views/Auth')
+    component: () => import(/* webpackChunkName: "auth" */ '@/views/Auth'),
   },
   {
     path: '/all',
     name: 'All',
-    component: () => import(/* webpackChunkName: "all" */ '@/views/All')
-  }
+    component: () => import(/* webpackChunkName: "all" */ '@/views/All'),
+  },
 ];
 
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes
+  routes,
 });
 
-const restrictedPaths = ['/', '/all', '/orders'];
+const restrictedPaths = ['/', '/all'];
 
 router.beforeEach((to, from, next) => {
   if (

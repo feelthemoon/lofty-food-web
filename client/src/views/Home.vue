@@ -16,40 +16,35 @@
     <div class="main__footer">
       <span>Итоговая сумма: {{ finalSum }}</span>
       <v-dialog transition="dialog-bottom-transition" max-width="600">
-      <template v-slot:activator="{ on, attrs }">
-        <div class="approve">
-          <v-btn
-            color="deep-purple accent-2"
-            class="text-center send-btn"
-            v-bind="attrs"
-            v-on="on"
-          >
-            <span>Отправить заказ</span>
-<!--            <v-icon class="send-icon" left small>fa_send</v-icon>-->
-          </v-btn>
-        </div>
-      </template>
-      <template v-slot:default="dialog">
-        <v-card>
-          <v-card-title class="accept-title"
-            >Вы уверены, что хотите отправить заказ?</v-card-title
-          >
-          <v-card-text class="accept-text">
-            <div>
-              В данной версии редактировать заказы после отправки нельзя
-            </div>
-          </v-card-text>
-          <v-card-actions class="justify-end accept-actions">
-            <v-btn color="red accent-2" text @click="dialog.value = false"
-              >Нет, подумаю ещё🤔</v-btn
+        <template v-slot:activator="{ on, attrs }">
+          <div class="approve">
+            <v-btn
+              color="deep-purple accent-2"
+              class="text-center send-btn"
+              v-bind="attrs"
+              v-on="on"
             >
-            <v-btn color="green lighten-2" text @click="sendTable(dialog)"
-              >Да, уверен 😎
+              <span>Отправить заказ</span>
+              <!--            <v-icon class="send-icon" left small>fa_send</v-icon>-->
             </v-btn>
-          </v-card-actions>
-        </v-card>
-      </template>
-    </v-dialog>
+          </div>
+        </template>
+        <template v-slot:default="dialog">
+          <v-card>
+            <v-card-title class="accept-title"
+              >Вы уверены, что хотите отправить заказ?</v-card-title
+            >
+            <v-card-actions class="justify-end accept-actions">
+              <v-btn color="red accent-2" text @click="dialog.value = false"
+                >Нет, подумаю ещё🤔</v-btn
+              >
+              <v-btn color="green lighten-2" text @click="sendTable(dialog)"
+                >Да, уверен 😎
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </template>
+      </v-dialog>
     </div>
   </v-main>
 </template>
@@ -62,7 +57,7 @@ import { mapActions, mapGetters, mapMutations } from 'vuex';
 export default {
   components: {
     DataTable,
-    TableLoader
+    TableLoader,
   },
   data() {
     return {
@@ -70,35 +65,33 @@ export default {
         headers: [
           {
             text: 'id',
-            value: 'id'
+            value: 'id',
           },
           {
             text: 'Название',
             value: 'title',
-            align: 'center'
           },
           {
             text: 'Категория',
             value: 'category',
-            align: 'center'
           },
           {
             text: 'Цена',
-            value: 'price'
+            value: 'price',
           },
           {
             text: 'Количество',
-            value: 'count'
+            value: 'count',
           },
           {
             text: 'Стоимость',
-            value: 'cost'
+            value: 'cost',
           },
           {
             text: '',
-            value: 'actions'
-          }
-        ]
+            value: 'actions',
+          },
+        ],
       },
       tabs: ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница'],
       day: 1,
@@ -111,10 +104,10 @@ export default {
       loadTable: 'table/loadTable',
       sendData: 'table/postTableData',
       authorization: 'auth/authorization',
-      getUser: 'user/getUserInfo'
+      getUser: 'user/getUserInfo',
     }),
     ...mapMutations({
-      updateData: 'table/UPDATE_ROW'
+      updateData: 'table/UPDATE_ROW',
     }),
     async updateTable(day) {
       this.day = day + 1;
@@ -125,19 +118,21 @@ export default {
       }
     },
     updateTableData(params, type) {
-      ((type === 'add') && (this.finalSum += params.price)) || (this.finalSum -= params.price)
+      (type === 'add' && (this.finalSum += params.price)) ||
+        (this.finalSum -= params.price);
       this.updateData({ day: this.day, data: params });
     },
     async sendTable(dialog) {
       await this.sendData();
       dialog.value = false;
-    }
+      this.finalSum = 0;
+    },
   },
   computed: {
     ...mapGetters({
       food: 'table/food',
-      user: 'user/user'
-    })
+      user: 'user/user',
+    }),
   },
   name: 'Home',
   async created() {
@@ -155,6 +150,6 @@ export default {
     }
     await this.loadTable({ day: 1 });
     this.loading = false;
-  }
+  },
 };
 </script>

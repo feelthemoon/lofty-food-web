@@ -6,15 +6,15 @@ export default {
   state: {
     table: {
       food: {},
-      users: {
-        data: []
-      }
-    }
+      orders: {
+        data: [],
+      },
+    },
   },
   mutations: {
     UPDATE_DATA(state, params) {
       if (params.namespace === 'users') {
-        return state.table.users.data = params.data;
+        return (state.table.orders.data = params.data);
       }
       if (!state.table[params.namespace][params.day] && params.day) {
         Vue.set(state.table[params.namespace], params.day, params.data);
@@ -24,7 +24,7 @@ export default {
     },
     UPDATE_ROW(state, params) {
       const itemIndex = state.table.food[params.day].findIndex(
-        item => item.id === params.data.id
+        item => item.id === params.data.id,
       );
       state.table.food[params.day].splice(itemIndex, 1, params.data);
     },
@@ -35,7 +35,7 @@ export default {
           item.count = 0;
         });
       });
-    }
+    },
   },
   getters: {
     food: state => day => state.table.food[day],
@@ -52,15 +52,35 @@ export default {
       });
       return table;
     },
-    users: state => {
-      if (state.table.users.data.length) {
-        return state.table.users.data.map(user => ({
-          ...user,
-          createdAt: user.createdAt.split('T')[0].split('-').reverse().join('.')
+    orders: state => {
+      if (state.table.orders.data.length) {
+        return state.table.orders.data.map(order => ({
+          ...order,
+          slack_id: order.user.slack_id,
+          name: order.user.name,
+          email: order.user.email,
+          createdAt: order.createdAt
+            .split('T')[0]
+            .split('-')
+            .reverse()
+            .join('.'),
         }));
       }
       return [];
     },
+    orderFood: state => (user, day) =>
+      state.table.orders.data.map(order => {
+        if (order.user.email === user) {
+          return order.food
+            .filter(value => value.day - 1 === day)
+            .map(val => {
+              if (val.food.count > 1) {
+                return `${val.food.title} ${val.food.count}шт.`;
+              }
+              return val.food.title;
+            });
+        }
+      })[0],
   },
   actions: {
     async loadTable({ commit, rootGetters }, params) {
@@ -69,7 +89,7 @@ export default {
         commit('UPDATE_DATA', {
           namespace: 'food',
           data: res.data,
-          day: params.day
+          day: params.day,
         });
       } catch (e) {
         console.log(e);
@@ -83,16 +103,16 @@ export default {
         console.log(e);
       }
     },
-    async loadUsersTable({commit, rootGetters}) {
+    async loadUsersTable({ commit, rootGetters }) {
       try {
         const res = await api.usersTable(rootGetters.token);
         commit('UPDATE_DATA', {
           namespace: 'users',
-          data: res.data
-        })
-      }catch (e) {
+          data: res.data,
+        });
+      } catch (e) {
         console.log(e);
       }
-    }
-  }
+    },
+  },
 };
