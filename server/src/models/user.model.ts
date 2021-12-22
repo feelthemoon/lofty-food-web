@@ -1,27 +1,29 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
-import { DataTypes } from 'sequelize';
+import { Column, DataType, Model, Table, HasMany } from 'sequelize-typescript';
+import { OrderModel } from './order.model';
+
 
 interface IUser {
-  id: string;
+  slack_id: string;
   name: string;
   email: string;
-  orders: any;
-  final_sum: number;
-  days_sum: any;
 }
 
 @Table({ tableName: 'Users' })
 export class User extends Model<User, IUser> {
-  @Column({ type: DataType.STRING, unique: true, primaryKey: true })
-  id: string;
+  @Column({
+    type: DataType.INTEGER,
+    unique: true,
+    primaryKey: true,
+    autoIncrement: true,
+  })
+  id: number;
+  @Column({ type: DataType.STRING, unique: true })
+  slack_id: string;
   @Column({ type: DataType.STRING, allowNull: false })
   email: string;
   @Column({ type: DataType.STRING, allowNull: false })
   name: string;
-  @Column({ type: DataType.ARRAY(DataTypes.JSON), allowNull: false })
-  orders: any;
-  @Column({ type: DataType.INTEGER, allowNull: false })
-  final_sum: number;
-  @Column({ type: DataType.ARRAY(DataTypes.JSON), allowNull: false })
-  days_sum: any;
+
+  @HasMany(() => OrderModel)
+  orders: [];
 }

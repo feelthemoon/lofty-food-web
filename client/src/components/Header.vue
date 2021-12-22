@@ -10,14 +10,28 @@
             <v-img :src="user.pic" :alt="user.username" class="avatar"></v-img>
           </v-btn>
         </template>
-
         <v-list>
-            <v-list-item
-              v-for="(link, index) in links"
-              :key="index"
+          <v-list-item
+            v-for="(link, index) in links"
+            :key="index"
+            class="header__item"
+          >
+            <router-link
+              class="header__link"
+              exact
+              exact-active-class="link-active"
+              :to="`/${link.src}`"
+              >{{ link.title }}</router-link
             >
-              <router-link class="header__link" exact exact-active-class="link-active" :to="`/${link.src}`">{{ link.title }}</router-link>
-            </v-list-item>
+          </v-list-item>
+          <v-list-item class="header__item">
+            <a
+              class="header__link"
+              href="https://loftyfood.ru/api/download"
+              target="_blank"
+              >Скачать таблицу</a
+            >
+          </v-list-item>
         </v-list>
       </v-menu>
     </div>
@@ -25,7 +39,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'Header',
@@ -34,20 +48,23 @@ export default {
       selectedLink: 0,
       links: [
         { title: 'Дашборд', src: '' },
-        { title: 'Все заказы', src: 'all' }
-      ]
+        { title: 'Все заказы', src: 'all' },
+      ],
     };
   },
   computed: {
     ...mapGetters({
-      user: 'user/user'
+      user: 'user/user',
     }),
     isUser() {
       return Object.keys(this.user).length > 0;
-    }
+    },
   },
-
+  methods: {
+    ...mapActions({ downloadTable: 'download' }),
+    download() {
+      this.downloadTable();
+    },
+  },
 };
 </script>
-
-<style scoped></style>

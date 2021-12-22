@@ -3,12 +3,14 @@ import { Request, Response } from 'express';
 
 import { TableService } from './table.service';
 import { UsersService } from '../users/users.service';
+import { OrdersService } from '../orders/orders.service';
 
 @Controller()
 export class TableController {
   constructor(
     private readonly tableService: TableService,
     private readonly usersService: UsersService,
+    private readonly ordersService: OrdersService,
   ) {}
   @Get('api/table/:day')
   async getTableForClient(@Req() req: Request, @Res() res: Response) {
@@ -24,12 +26,19 @@ export class TableController {
   @Post('api/postdata')
   async setTableData(@Req() req: Request, @Res() res: Response) {
     try {
-      await this.usersService.setUserOrders(
-        req.headers.authorization,
-        req.body,
-      );
+      const user = await this.usersService.create(req.headers.authorization);
+      await this.ordersService.create(req.body, user);
       await this.tableService.setTableData(req.body);
       res.status(200).json({ message: 'ok' });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  @Get('api/download')
+  async getTable(@Req() req: Request, @Res() res: Response) {
+    try {
+      const file = this.tableService.downloadParams();
+      res.status(200).download(file);
     } catch (e) {
       console.log(e);
     }
