@@ -4,7 +4,6 @@
     mobile-breakpoint="1100"
     class="table-orders"
     :items="table.data"
-    @click:row="redirect($event)"
     :items-per-page="25"
     :footer-props="{
       'items-per-page-options': [10, 15, 20, -1],
@@ -61,7 +60,7 @@
 
 <script>
 import TableLoader from '@/components/TableLoader';
-import { mapGetters } from 'vuex';
+import {mapGetters} from 'vuex';
 
 export default {
   name: 'TableOrders',
@@ -76,7 +75,8 @@ export default {
     },
   },
   components: {
-    TableLoader,
+
+    TableLoader
   },
   data() {
     return {
@@ -103,15 +103,9 @@ export default {
   methods: {
     getDayOrder(day) {
       this.currentDay = day;
-      this.foodOrder = this.food(this.currentUser, day);
+      this.foodOrder = this.food(this.currentUser, day).filter(item => item)[0];
       if (!this.foodOrder.length)
         this.foodOrder.push('На этот день нет заказов');
-    },
-    redirect(user) {
-      window.open(
-        `https://app.slack.com/client/T0E52C0NT/${user.slack_id}`,
-        'blank',
-      );
     },
     openDialog(item) {
       this.currentUser = item.email;

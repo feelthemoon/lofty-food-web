@@ -66,10 +66,12 @@ export default {
           {
             text: 'id',
             value: 'id',
+            sortable: false
           },
           {
             text: 'Название',
             value: 'title',
+            sortable: false
           },
           {
             text: 'Категория',
@@ -77,23 +79,27 @@ export default {
           },
           {
             text: 'Вес, г',
-            value: 'weight'
+            value: 'weight',
+            sortable: false
           },
           {
-            text: 'Цена, Р',
+            text: 'Цена',
             value: 'price',
+
           },
           {
             text: 'Количество',
             value: 'count',
+            sortable: false
           },
           {
-            text: 'Стоимость, Р',
+            text: 'Стоимость',
             value: 'cost',
           },
           {
             text: '',
             value: 'actions',
+            sortable: false
           },
         ],
       },
