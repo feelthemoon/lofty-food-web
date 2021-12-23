@@ -1,9 +1,9 @@
 <template>
   <header class="header">
     <div class="header__inner">
-      <div class="logo">
+      <router-link to="/" class="logo">
         <img src="@/assets/static/logo.svg" alt="Lofty" />
-      </div>
+      </router-link>
       <v-menu v-if="isUser" bottom offset-y>
         <template v-slot:activator="{ on, attrs }">
           <v-btn class="profile-btn" small v-bind="attrs" v-on="on">
