@@ -1,7 +1,6 @@
 import { Column, DataType, Model, Table, HasMany } from 'sequelize-typescript';
 import { OrderModel } from './order.model';
 
-
 interface IUser {
   slack_id: string;
   name: string;

@@ -1,0 +1,19 @@
+{
+    "name": "Lofty Food",
+    "short_name": "Lofty Food",
+    "icons": [
+        {
+            "src": "/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#b548ff",
+    "background_color": "#b548ff",
+    "display": "standalone"
+}

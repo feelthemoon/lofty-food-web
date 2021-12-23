@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
-import { writeFile, createReadStream, existsSync, unlinkSync } from 'fs';
+import { writeFile, existsSync, unlinkSync } from 'fs';
 import { promisify } from 'util';
 import { Cron } from '@nestjs/schedule';
 import xlsx from 'node-xlsx';
@@ -15,14 +15,14 @@ export class TableService {
 
   constructor(private readonly httpService: HttpService) {}
 
-  @Cron('0 00 15 * * */4')
+  @Cron('0 34 11 * * */4')
   private async downloadCron() {
     if (existsSync(process.env.OLD_TABLE)) {
       unlinkSync(process.env.OLD_TABLE);
     }
     await this.downloadFile(process.env.APP_REMOTE_URL, process.env.OLD_TABLE);
   }
-  @Cron('0 05 15 * * */4')
+  @Cron('0 35 11 * * */4')
   private async createTableCron() {
     if (existsSync(process.env.NEW_TABLE)) {
       unlinkSync(process.env.NEW_TABLE);
@@ -52,6 +52,7 @@ export class TableService {
           row = {
             id: row[0],
             title: row[1],
+            weight: row[2],
             price: row[3],
             cost: 0,
             count: 0,
@@ -88,19 +89,6 @@ export class TableService {
     return food;
   }
 
-  async prepareTableForSend(table) {
-    const isFileExists = existsSync(process.env.NEW_TABLE);
-    if (!isFileExists) {
-      this.table = xlsx.parse(process.env.OLD_TABLE);
-      await writeFilePromise.call(
-        this,
-        process.env.NEW_TABLE,
-        xlsx.build(this.table),
-      );
-    }
-    return createReadStream(table);
-  }
-
   private async writeTable(table = this.table) {
     await writeFilePromise.call(this, process.env.NEW_TABLE, xlsx.build(table));
   }
@@ -125,9 +113,7 @@ export class TableService {
         currentDayList[foodPosInTable][5] += cost;
         currentDayList[foodPosInTable][4] = currentFoodCount;
 
-        currentDayList[currentDayList.length - 5][5] = {
-          f: `SUM(F2:F${currentDayList.length - 6})`,
-        };
+        currentDayList[currentDayList.length - 5][5] += cost;
       });
     });
     await this.writeTable(newTable);

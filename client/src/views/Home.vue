@@ -76,7 +76,11 @@ export default {
             value: 'category',
           },
           {
-            text: 'Цена',
+            text: 'Вес, г',
+            value: 'weight'
+          },
+          {
+            text: 'Цена, Р',
             value: 'price',
           },
           {
@@ -84,7 +88,7 @@ export default {
             value: 'count',
           },
           {
-            text: 'Стоимость',
+            text: 'Стоимость, Р',
             value: 'cost',
           },
           {
