@@ -80,7 +80,7 @@ export default {
               return val.food.title;
             });
         }
-      })[0],
+      }),
   },
   actions: {
     async loadTable({ commit, rootGetters }, params) {
@@ -106,6 +106,7 @@ export default {
     async loadUsersTable({ commit, rootGetters }) {
       try {
         const res = await api.usersTable(rootGetters.token);
+        console.log(res.data);
         commit('UPDATE_DATA', {
           namespace: 'users',
           data: res.data,

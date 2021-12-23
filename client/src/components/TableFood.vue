@@ -8,12 +8,12 @@
     :footer-props="{
       'items-per-page-options': [10, 15, 20, -1],
     }"
-    dense
   >
     <template #body v-if="loading">
       <table-loader></table-loader>
     </template>
     <template v-slot:[`item.actions`]="{ item }">
+      <div class='actions'>
       <v-btn
         fab
         dark
@@ -34,6 +34,7 @@
       >
         +
       </v-btn>
+      </div>
     </template>
   </v-data-table>
 </template>
