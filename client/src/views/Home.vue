@@ -8,43 +8,13 @@
         >{{ tab }}</v-tab
       >
     </v-tabs>
-    <data-table
-      :table="{ data: food(day), headers: foodData.headers }"
-      :loading="loading"
-      @update-data="updateTableData"
-    ></data-table>
-    <div class="main__footer">
-      <span>Итоговая сумма: {{ finalSum }}</span>
-      <v-dialog transition="dialog-bottom-transition" max-width="600">
-        <template v-slot:activator="{ on, attrs }">
-          <div class="approve">
-            <v-btn
-              color="deep-purple accent-2"
-              class="text-center send-btn"
-              v-bind="attrs"
-              v-on="on"
-            >
-              <span>Отправить заказ</span>
-              <!--            <v-icon class="send-icon" left small>fa_send</v-icon>-->
-            </v-btn>
-          </div>
-        </template>
-        <template v-slot:default="dialog">
-          <v-card>
-            <v-card-title class="accept-title"
-              >Вы уверены, что хотите отправить заказ?</v-card-title
-            >
-            <v-card-actions class="justify-end accept-actions">
-              <v-btn color="red accent-2" text @click="dialog.value = false"
-                >Нет, подумаю ещё🤔</v-btn
-              >
-              <v-btn color="green lighten-2" text @click="sendTable(dialog)"
-                >Да, уверен 😎
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </template>
-      </v-dialog>
+    <div class='main__inner'>
+      <data-table
+        :table="{ data: food(day), headers: foodData.headers }"
+        :loading="loading"
+        @update-data="updateTableData"
+      ></data-table>
+      <cart :final-sum='finalSum' :cart-items='cartItems' @send-table='sendTable'></cart>
     </div>
   </v-main>
 </template>
@@ -53,9 +23,11 @@
 import DataTable from '@/components/TableFood';
 import TableLoader from '@/components/TableLoader';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
+import Cart from '@/components/Cart';
 
 export default {
   components: {
+    Cart,
     DataTable,
     TableLoader,
   },
@@ -107,6 +79,7 @@ export default {
       day: 1,
       loading: true,
       finalSum: 0,
+      cartItems: [],
     };
   },
   methods: {
@@ -127,10 +100,22 @@ export default {
         this.loading = false;
       }
     },
-    updateTableData(params, type) {
-      (type === 'add' && (this.finalSum += params.price)) ||
-        (this.finalSum -= params.price);
-      this.updateData({ day: this.day, data: params });
+    updateTableData(foodData, type) {
+      let foundItemIndex = this.cartItems.findIndex(item => item.id === foodData.id && item.day === this.day);
+      foundItemIndex = ~foundItemIndex ? foundItemIndex : this.cartItems.length;
+
+      if (foodData.count > 0 || type === 'add') {
+        this.cartItems.splice(foundItemIndex, 1, { day: this.day, ...foodData });
+      }else {
+        this.cartItems.splice(foundItemIndex, 1);
+      }
+
+      if(type==='add') {
+        this.finalSum += foodData.price
+      }else {
+        this.finalSum -= foodData.price
+      }
+      this.updateData({ day: this.day, data: foodData });
     },
     async sendTable(dialog) {
       await this.sendData();

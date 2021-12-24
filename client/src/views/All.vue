@@ -35,11 +35,11 @@ export default {
             align: 'center',
           },
           {
-            text: 'Заказ(пн, вт, ср, чт, пт), Р',
+            text: 'Заказ(пн, вт, ср, чт, пт), ₽',
             value: 'days_sum',
           },
           {
-            text: 'Финальная стоимость, Р',
+            text: 'Финальная стоимость, ₽',
             value: 'final_sum',
           },
           {
