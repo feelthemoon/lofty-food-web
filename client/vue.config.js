@@ -17,8 +17,8 @@ module.exports = {
   pages: {
     app: {
       entry: 'src/main.js',
-      template: 'public/index.html',
-      filename: './public/index.html',
+      template: '/index.html',
+      filename: './index.html',
       chunks: ["chunk-vender", "chunk-common", "chunk-app-vendors", "app"]
     },
   },
