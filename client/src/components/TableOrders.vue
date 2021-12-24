@@ -13,24 +13,30 @@
     <template #body v-if="loading">
       <table-loader></table-loader>
     </template>
+
     <template v-slot:[`item.actions`]="{ item }">
       <v-dialog
         content-class="order-dialog"
         transition="dialog-bottom-transition"
         max-width="600"
       >
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            dark
-            class="mr-3 mb-1 mt-1 table-actions show-detail"
-            small
-            color="deep-purple darken-1"
-            v-bind="attrs"
-            v-on="on"
-            @click="openDialog(item)"
-          >
-            <v-icon>list_alt</v-icon>
-          </v-btn>
+        <template v-slot:activator="{ on: onDialog, attrs: attrsDialog }">
+          <v-tooltip top>
+            <template v-slot:activator="{ on: onTooltip, attrs: attrsTooltip }">
+              <v-btn
+                dark
+                class="mr-3 mb-1 mt-1 table-actions show-detail"
+                small
+                color="deep-purple darken-1"
+                v-bind="{...attrsDialog, ...attrsTooltip}"
+                v-on="{...onDialog, ...onTooltip}"
+                @click="openDialog(item)"
+              >
+                <v-icon>list_alt</v-icon>
+              </v-btn>
+            </template>
+            <span>Детали заказа</span>
+          </v-tooltip>
         </template>
         <template v-slot:default="dialog">
           <v-tabs
