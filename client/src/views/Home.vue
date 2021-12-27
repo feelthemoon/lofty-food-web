@@ -8,19 +8,23 @@
         >{{ tab }}</v-tab
       >
     </v-tabs>
-    <div class='main__inner'>
-      <data-table
+    <div class="main__inner">
+      <food-table
         :table="{ data: food(day), headers: foodData.headers }"
         :loading="loading"
-        @update-data="updateTableData"
-      ></data-table>
-      <cart :final-sum='finalSum' :cart-items='cartItems' @send-table='sendTable'></cart>
+        @update-table="updateTableData"
+      ></food-table>
+      <cart
+        :final-sum="finalSum"
+        :cart-items="cartItems"
+        @send-table="sendTable"
+      ></cart>
     </div>
   </v-main>
 </template>
 
 <script>
-import DataTable from '@/components/TableFood';
+import FoodTable from '@/components/TableFood';
 import TableLoader from '@/components/TableLoader';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 import Cart from '@/components/Cart';
@@ -28,7 +32,7 @@ import Cart from '@/components/Cart';
 export default {
   components: {
     Cart,
-    DataTable,
+    FoodTable,
     TableLoader,
   },
   data() {
@@ -38,12 +42,12 @@ export default {
           {
             text: 'id',
             value: 'id',
-            sortable: false
+            sortable: false,
           },
           {
             text: 'Название',
             value: 'title',
-            sortable: false
+            sortable: false,
           },
           {
             text: 'Категория',
@@ -52,17 +56,16 @@ export default {
           {
             text: 'Вес, г',
             value: 'weight',
-            sortable: false
+            sortable: false,
           },
           {
             text: 'Цена',
             value: 'price',
-
           },
           {
             text: 'Количество',
             value: 'count',
-            sortable: false
+            sortable: false,
           },
           {
             text: 'Стоимость',
@@ -71,7 +74,7 @@ export default {
           {
             text: '',
             value: 'actions',
-            sortable: false
+            sortable: false,
           },
         ],
       },
@@ -79,7 +82,6 @@ export default {
       day: 1,
       loading: true,
       finalSum: 0,
-      cartItems: [],
     };
   },
   methods: {
@@ -91,6 +93,9 @@ export default {
     }),
     ...mapMutations({
       updateData: 'table/UPDATE_ROW',
+      updateCart: 'cart/UPDATE_CART_ITEMS',
+      updateOrderSum: 'cart/UPDATE_ORDER_SUM',
+      resetCart: 'cart/RESET_CART',
     }),
     async updateTable(day) {
       this.day = day + 1;
@@ -101,32 +106,21 @@ export default {
       }
     },
     updateTableData(foodData, type) {
-      let foundItemIndex = this.cartItems.findIndex(item => item.id === foodData.id && item.day === this.day);
-      foundItemIndex = ~foundItemIndex ? foundItemIndex : this.cartItems.length;
-
-      if (foodData.count > 0 || type === 'add') {
-        this.cartItems.splice(foundItemIndex, 1, { day: this.day, ...foodData });
-      }else {
-        this.cartItems.splice(foundItemIndex, 1);
-      }
-
-      if(type==='add') {
-        this.finalSum += foodData.price
-      }else {
-        this.finalSum -= foodData.price
-      }
+      this.updateCart({ typeAction: type, foodData, day: this.day });
+      this.updateOrderSum({ foodData, type });
       this.updateData({ day: this.day, data: foodData });
     },
     async sendTable(dialog) {
       await this.sendData();
       dialog.value = false;
-      this.finalSum = 0;
+      this.resetCart();
     },
   },
   computed: {
     ...mapGetters({
       food: 'table/food',
       user: 'user/user',
+      cartItems: 'cart/cartItems',
     }),
   },
   name: 'Home',

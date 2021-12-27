@@ -189,7 +189,6 @@ a {
     border-bottom: 1px solid rgba(#000, .1);
   }
   &__items {
-    max-width: 320px;
     width: 100%;
     margin: 0 auto;
     max-height: 485px;
@@ -203,6 +202,12 @@ a {
     &::-webkit-scrollbar-thumb {
       border-radius: 10px;
       background-color: #5E35B1;
+    }
+    .v-card {
+      max-width: 320px!important;
+      width: 100%;
+      margin-right: auto!important;
+      margin-left: auto!important;
     }
     .v-card__title {
       font-size: 15px!important;

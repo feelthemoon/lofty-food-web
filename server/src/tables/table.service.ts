@@ -15,20 +15,22 @@ export class TableService {
 
   constructor(private readonly httpService: HttpService) {}
 
-  @Cron('0 34 11 * * */4')
+  @Cron('0 00 08 * * THU')
   private async downloadCron() {
     if (existsSync(process.env.OLD_TABLE)) {
       unlinkSync(process.env.OLD_TABLE);
     }
     await this.downloadFile(process.env.APP_REMOTE_URL, process.env.OLD_TABLE);
+    await writeFilePromise('./cron.log', `[${new Date()}] - Downloaded Table`);
   }
-  @Cron('0 35 11 * * */4')
+  @Cron('0 02 08 * * THU')
   private async createTableCron() {
     if (existsSync(process.env.NEW_TABLE)) {
       unlinkSync(process.env.NEW_TABLE);
     }
     const data = xlsx.build(xlsx.parse(process.env.OLD_TABLE));
     await writeFilePromise(process.env.NEW_TABLE, data);
+    await writeFilePromise('./cron.log', `[${new Date()}] - Generated Table`);
   }
   downloadParams() {
     return path.resolve(__dirname, '../../data/table.xlsx');

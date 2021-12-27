@@ -6,7 +6,7 @@
       style="
         align-items: center;
         color: #fff !important;
-        background-color: #4a154b;
+        background-color: #5E35B1;
         border: 0;
         border-radius: 44px;
         display: inline-flex;

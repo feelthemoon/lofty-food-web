@@ -13,27 +13,27 @@
       <table-loader></table-loader>
     </template>
     <template v-slot:[`item.actions`]="{ item }">
-      <div class='actions'>
-      <v-btn
-        fab
-        dark
-        class="mr-3 mb-1 mt-1 table-actions"
-        small
-        color="deep-purple darken-1"
-        @click="updateData('remove', item)"
-      >
-        -
-      </v-btn>
-      <v-btn
-        fab
-        dark
-        small
-        class="mb-1 mt-1 table-actions"
-        color="deep-purple darken-1"
-        @click="updateData('add', item)"
-      >
-        +
-      </v-btn>
+      <div class="actions">
+        <v-btn
+          fab
+          dark
+          class="mr-3 mb-1 mt-1 table-actions"
+          small
+          color="deep-purple darken-1"
+          @click="updateData('remove', item)"
+        >
+          -
+        </v-btn>
+        <v-btn
+          fab
+          dark
+          small
+          class="mb-1 mt-1 table-actions"
+          color="deep-purple darken-1"
+          @click="updateData('add', item)"
+        >
+          +
+        </v-btn>
       </div>
     </template>
   </v-data-table>
@@ -56,7 +56,7 @@ export default {
     updateData(type, data) {
       if (type === 'remove' && data.count > 0) {
         this.$emit(
-          'update-data',
+          'update-table',
           {
             ...data,
             count: data.count - 1,
@@ -66,7 +66,7 @@ export default {
         );
       } else if (type === 'add') {
         this.$emit(
-          'update-data',
+          'update-table',
           {
             ...data,
             count: data.count + 1,

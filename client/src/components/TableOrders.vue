@@ -28,8 +28,8 @@
                 class="mr-3 mb-1 mt-1 table-actions show-detail"
                 small
                 color="deep-purple darken-1"
-                v-bind="{...attrsDialog, ...attrsTooltip}"
-                v-on="{...onDialog, ...onTooltip}"
+                v-bind="{ ...attrsDialog, ...attrsTooltip }"
+                v-on="{ ...onDialog, ...onTooltip }"
                 @click="openDialog(item)"
               >
                 <v-icon>list_alt</v-icon>
@@ -66,7 +66,7 @@
 
 <script>
 import TableLoader from '@/components/TableLoader';
-import {mapGetters} from 'vuex';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'TableOrders',
@@ -81,8 +81,7 @@ export default {
     },
   },
   components: {
-
-    TableLoader
+    TableLoader,
   },
   data() {
     return {
