@@ -7,6 +7,8 @@
 **/.DS_Store
 **/.env.prod
 
+./server/cron.log
+
 **.crt
 **.key
 
