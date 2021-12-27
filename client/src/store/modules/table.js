@@ -42,16 +42,16 @@ export default {
   },
   getters: {
     food: state => day => state.table.food[day],
-    tableForSend: state => {
+    tableForSend: () => {
       const table = {};
-      Object.keys(state.table.food).forEach(key => {
-        state.table.food[key].forEach(item => {
-          if (item.count > 0 && table[key]) {
-            table[key].push(item);
-          } else if (item.count > 0) {
-            table[key] = [item];
-          }
-        });
+      const cartItems = JSON.parse(localStorage.getItem('cartItems'));
+      cartItems.forEach(item => {
+        const day = item.day;
+        delete item.day;
+        if (table[day]) {
+          return table[day].push(item);
+        }
+        table[day] = [item];
       });
       return table;
     },
