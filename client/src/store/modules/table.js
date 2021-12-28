@@ -42,19 +42,6 @@ export default {
   },
   getters: {
     food: state => day => state.table.food[day],
-    tableForSend: () => {
-      const table = {};
-      const cartItems = JSON.parse(localStorage.getItem('cartItems'));
-      cartItems.forEach(item => {
-        const day = item.day;
-        delete item.day;
-        if (table[day]) {
-          return table[day].push(item);
-        }
-        table[day] = [item];
-      });
-      return table;
-    },
     orders: state => {
       if (state.table.orders.data.length) {
         return state.table.orders.data.map(order => ({
@@ -106,9 +93,19 @@ export default {
         console.log(e);
       }
     },
-    async postTableData({ commit, getters, rootGetters }) {
+    async postTableData({ commit, rootGetters }) {
       try {
-        await api.sendTable(getters.tableForSend, rootGetters.token);
+        const table = {};
+        const cartItems = JSON.parse(localStorage.getItem('cartItems'));
+        cartItems.forEach(item => {
+          const day = item.day;
+          delete item.day;
+          if (table[day]) {
+            return table[day].push(item);
+          }
+          table[day] = [item];
+        });
+        await api.sendTable(table, rootGetters.token);
         commit('RESET_TABLE');
       } catch (e) {
         console.log(e);

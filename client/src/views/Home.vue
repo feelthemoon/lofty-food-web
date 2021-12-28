@@ -135,7 +135,7 @@ export default {
     }
     await this.getUser();
     if (!Object.keys(this.user).length) {
-      await this.$router.push({ name: 'Auth' });
+      return await this.$router.push({ name: 'Auth' });
     }
     await this.loadTable({ day: 1 });
     this.loading = false;
