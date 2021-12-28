@@ -15,7 +15,7 @@ export class TableService {
 
   constructor(private readonly httpService: HttpService) {}
 
-  @Cron('0 00 08 * * THU')
+  @Cron('0 0 08 * * THU')
   private async downloadCron() {
     if (existsSync(process.env.OLD_TABLE)) {
       unlinkSync(process.env.OLD_TABLE);
@@ -23,7 +23,7 @@ export class TableService {
     await this.downloadFile(process.env.APP_REMOTE_URL, process.env.OLD_TABLE);
     await writeFilePromise('./cron.log', `[${new Date()}] - Downloaded Table`);
   }
-  @Cron('0 02 08 * * THU')
+  @Cron('0 01 08 * * THU')
   private async createTableCron() {
     if (existsSync(process.env.NEW_TABLE)) {
       unlinkSync(process.env.NEW_TABLE);
