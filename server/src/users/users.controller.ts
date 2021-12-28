@@ -11,9 +11,15 @@ export class UsersController {
   async getTableForClient(@Req() req: Request, @Res() res: Response) {
     try {
       const user = await this.userService.decodeJWT(req.headers.authorization);
-      await res.status(200).json(user);
+      const allowedUsers = await this.userService.getAllowedUsers();
+
+      if (allowedUsers.members.includes(user['https://slack.com/user_id'])) {
+        return await res.status(200).json(user);
+      }
+      return await res
+        .status(403)
+        .json({ message: 'У вас нет доступа к данному сервису' });
     } catch (e) {
-      console.log(e);
       await res.status(500).json({ message: 'Wrong data' });
     }
   }

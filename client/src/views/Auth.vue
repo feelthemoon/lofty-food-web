@@ -41,10 +41,13 @@
         ></path></svg
       >Sign in with Slack</a
     >
+    <v-alert type="error" v-if="noAccess" dismissible>{{ noAccess }}</v-alert>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'Auth',
 
@@ -54,6 +57,11 @@ export default {
     } else {
       next();
     }
+  },
+  computed: {
+    ...mapGetters({
+      noAccess: 'user/noAccess',
+    }),
   },
 };
 </script>
