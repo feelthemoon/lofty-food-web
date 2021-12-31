@@ -47,9 +47,8 @@ export class OrdersService {
         final_sum += food.cost;
 
         const foundIndexFood = orders.findIndex(
-          (f) => f.food?.id === food.id && f.day === food.day,
+          (f) => f.food?.id === food.id && +f.day === food.day,
         );
-
         if (~foundIndexFood) {
           orders[foundIndexFood].food.cost += food.cost;
           orders[foundIndexFood].food.count += food.count;
