@@ -98,12 +98,10 @@ export default {
         const table = {};
         const cartItems = JSON.parse(localStorage.getItem('cartItems'));
         cartItems.forEach(item => {
-          const day = item.day;
-          delete item.day;
-          if (table[day]) {
-            return table[day].push(item);
+          if (table[item.day]) {
+            return table[item.day].push(item);
           }
-          table[day] = [item];
+          table[item.day] = [item];
         });
         await api.sendTable(table, rootGetters.token);
         commit('RESET_TABLE');
