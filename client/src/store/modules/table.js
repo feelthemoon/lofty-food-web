@@ -58,9 +58,9 @@ export default {
       }
       return [];
     },
-    orderFood: state => (user, day) =>
+    orderFood: state => (user, day, createdAt) =>
       state.table.orders.data.map(order => {
-        if (order.user.email === user) {
+        if (order.user.email === user && order.createdAt.split('T')[0] === createdAt) {
           return order.food
             .filter(value => value.day - 1 === day)
             .map(val => {

@@ -89,6 +89,7 @@ export default {
       currentUser: null,
       foodOrder: [],
       currentDay: new Date().getDay() - 1,
+      currentCreatedAt: '',
     };
   },
   computed: {
@@ -108,16 +109,16 @@ export default {
   methods: {
     getDayOrder(day) {
       this.currentDay = day;
-      this.foodOrder = this.food(this.currentUser, day).filter(item => item)[0];
+      this.foodOrder = this.food(this.currentUser, day, this.currentCreatedAt).filter(item => item)[0];
       if (!this.foodOrder.length)
         this.foodOrder.push('На этот день нет заказов');
     },
     openDialog(item) {
       this.currentUser = item.email;
+      this.currentCreatedAt = this.currentCreatedAt.split('.').reverse().join('-');
       this.getDayOrder(this.currentDay);
     },
   },
 };
 </script>
 
-<style scoped></style>
