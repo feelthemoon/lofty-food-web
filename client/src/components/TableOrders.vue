@@ -115,7 +115,7 @@ export default {
     },
     openDialog(item) {
       this.currentUser = item.email;
-      this.currentCreatedAt = this.currentCreatedAt.split('.').reverse().join('-');
+      this.currentCreatedAt = item.createdAt.split('.').reverse().join('-');
       this.getDayOrder(this.currentDay);
     },
   },
