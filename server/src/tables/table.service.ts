@@ -33,7 +33,10 @@ export class TableService {
     await writeFilePromise('./cron.log', `[${new Date()}] - Generated Table`);
   }
   downloadParams() {
-    return path.resolve(__dirname, '../../data/table.xlsx');
+    const parsedTable = xlsx.parse(process.env.OLD_TABLE);
+    const [startRange, endRange] = [parsedTable[0].data[0][1].match(/\d+\.\d+\.\d+/)[0], parsedTable[4].data[0][1].match(/\d+\.\d+\.\d+/)[0]];
+
+    return ['./data/table.xlsx', `Заказ ${startRange}-${endRange}.xlsx`];
   }
   async downloadFile(url, outputPath) {
     const res = this.httpService.get(url, { responseType: 'arraybuffer' });
