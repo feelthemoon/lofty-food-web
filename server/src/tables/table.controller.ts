@@ -37,8 +37,8 @@ export class TableController {
   @Get('api/download')
   async getTable(@Req() req: Request, @Res() res: Response) {
     try {
-      const file = this.tableService.downloadParams();
-      res.status(200).download(file);
+      const [file, fileName] = this.tableService.downloadParams();
+      res.status(200).download(file, fileName);
     } catch (e) {
       console.log(e);
     }
