@@ -25,7 +25,7 @@ export class OrdersService {
   ) {}
 
   async getAll() {
-    return await this.orders.findAll({ raw: true });
+    return await this.orders.findAll({ raw: true, order: [['createdAt', 'DESC']] });
   }
   async create(order, user) {
     const foundOrder = await this.orders.findOne({

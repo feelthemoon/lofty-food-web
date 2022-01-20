@@ -5,7 +5,6 @@ import { writeFile, existsSync, unlinkSync } from 'fs';
 import { promisify } from 'util';
 import { Cron } from '@nestjs/schedule';
 import xlsx from 'node-xlsx';
-import * as path from 'path';
 
 const writeFilePromise = promisify(writeFile);
 
