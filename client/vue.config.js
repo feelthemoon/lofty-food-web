@@ -19,10 +19,10 @@ module.exports = {
       entry: 'src/main.js',
       template: '/index.html',
       filename: './index.html',
-      chunks: ["chunk-vender", "chunk-common", "chunk-app-vendors", "app"]
+      chunks: ["chunk-vendor", "chunk-common", "chunk-app-vendors", "app"]
     },
   },
-    configureWebpack(config) {
+  configureWebpack(config) {
     const IS_VENDOR = /[\\/]node_modules[\\/]/;
     config.optimization.splitChunks = {
       cacheGroups: {
@@ -56,4 +56,10 @@ module.exports = {
       },
     };
   },
+  chainWebpack: config => {
+    config.plugins.delete('prefetch-app');
+    config.plugin("preload-app").tap((options) => {
+      return options;
+    });
+  }
 }
