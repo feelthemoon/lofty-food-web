@@ -5,7 +5,6 @@ import { writeFile, existsSync, unlinkSync } from 'fs';
 import { promisify } from 'util';
 import { Cron } from '@nestjs/schedule';
 import xlsx from 'node-xlsx';
-import * as path from 'path';
 
 const writeFilePromise = promisify(writeFile);
 
@@ -15,23 +14,28 @@ export class TableService {
 
   constructor(private readonly httpService: HttpService) {}
 
-  @Cron('0 34 11 * * */4')
+  @Cron('0 0 08 * * THU')
   private async downloadCron() {
     if (existsSync(process.env.OLD_TABLE)) {
       unlinkSync(process.env.OLD_TABLE);
     }
     await this.downloadFile(process.env.APP_REMOTE_URL, process.env.OLD_TABLE);
+    await writeFilePromise('./cron.log', `[${new Date()}] - Downloaded Table`);
   }
-  @Cron('0 35 11 * * */4')
+  @Cron('0 01 08 * * THU')
   private async createTableCron() {
     if (existsSync(process.env.NEW_TABLE)) {
       unlinkSync(process.env.NEW_TABLE);
     }
     const data = xlsx.build(xlsx.parse(process.env.OLD_TABLE));
     await writeFilePromise(process.env.NEW_TABLE, data);
+    await writeFilePromise('./cron.log', `[${new Date()}] - Generated Table`);
   }
   downloadParams() {
-    return path.resolve(__dirname, '../../data/table.xlsx');
+    const parsedTable = xlsx.parse(process.env.OLD_TABLE);
+    const [startRange, endRange] = [parsedTable[0].data[0][1].match(/\d+\.\d+\.\d+/)[0], parsedTable[4].data[0][1].match(/\d+\.\d+\.\d+/)[0]];
+
+    return ['./data/table.xlsx', `Заказ ${startRange}-${endRange}.xlsx`];
   }
   async downloadFile(url, outputPath) {
     const res = this.httpService.get(url, { responseType: 'arraybuffer' });

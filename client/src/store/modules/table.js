@@ -5,7 +5,7 @@ export default {
   namespaced: true,
   state: {
     table: {
-      food: {},
+      food: JSON.parse(localStorage.getItem('food')) || {},
       orders: {
         data: [],
       },
@@ -23,10 +23,12 @@ export default {
       }
     },
     UPDATE_ROW(state, params) {
-      const itemIndex = state.table.food[params.day].findIndex(
-        item => item.id === params.data.id,
-      );
-      state.table.food[params.day].splice(itemIndex, 1, params.data);
+      if (state.table.food[params.day]) {
+        const itemIndex = state.table.food[params.day].findIndex(
+          item => item.id === params.data.id,
+        );
+        state.table.food[params.day].splice(itemIndex, 1, params.data);
+      }
     },
     RESET_TABLE(state) {
       Object.keys(state.table.food).forEach(key => {
@@ -35,23 +37,11 @@ export default {
           item.count = 0;
         });
       });
+      localStorage.removeItem('food');
     },
   },
   getters: {
     food: state => day => state.table.food[day],
-    tableForSend: state => {
-      const table = {};
-      Object.keys(state.table.food).forEach(key => {
-        state.table.food[key].forEach(item => {
-          if (item.count > 0 && table[key]) {
-            table[key].push(item);
-          } else if (item.count > 0) {
-            table[key] = [item];
-          }
-        });
-      });
-      return table;
-    },
     orders: state => {
       if (state.table.orders.data.length) {
         return state.table.orders.data.map(order => ({
@@ -68,9 +58,9 @@ export default {
       }
       return [];
     },
-    orderFood: state => (user, day) =>
+    orderFood: state => (user, day, createdAt) =>
       state.table.orders.data.map(order => {
-        if (order.user.email === user) {
+        if (order.user.email === user && order.createdAt.split('T')[0] === createdAt) {
           return order.food
             .filter(value => value.day - 1 === day)
             .map(val => {
@@ -83,7 +73,7 @@ export default {
       }),
   },
   actions: {
-    async loadTable({ commit, rootGetters }, params) {
+    async loadTable({ commit, rootGetters, getters }, params) {
       try {
         const res = await api.getTable(params.day, rootGetters.token);
         commit('UPDATE_DATA', {
@@ -91,13 +81,29 @@ export default {
           data: res.data,
           day: params.day,
         });
+        const cartItems = JSON.parse(localStorage.getItem('cartItems'));
+        if (cartItems) {
+          cartItems.forEach(item => {
+            const day = item.day;
+            delete item.day;
+            commit('UPDATE_ROW', { day, data: item });
+          });
+        }
       } catch (e) {
         console.log(e);
       }
     },
-    async postTableData({ commit, getters, rootGetters }) {
+    async postTableData({ commit, rootGetters }) {
       try {
-        await api.sendTable(getters.tableForSend, rootGetters.token);
+        const table = {};
+        const cartItems = JSON.parse(localStorage.getItem('cartItems'));
+        cartItems.forEach(item => {
+          if (table[item.day]) {
+            return table[item.day].push(item);
+          }
+          table[item.day] = [item];
+        });
+        await api.sendTable(table, rootGetters.token);
         commit('RESET_TABLE');
       } catch (e) {
         console.log(e);
@@ -106,7 +112,6 @@ export default {
     async loadUsersTable({ commit, rootGetters }) {
       try {
         const res = await api.usersTable(rootGetters.token);
-        console.log(res.data);
         commit('UPDATE_DATA', {
           namespace: 'users',
           data: res.data,

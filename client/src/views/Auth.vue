@@ -2,11 +2,11 @@
   <div class="auth">
     <h3>Заходи и забирай свое хрючево!😃</h3>
     <a
-      href="https://slack.com/openid/connect/authorize?scope=openid%20email%20profile&amp;response_type=code&amp;redirect_uri=https%3A%2F%2Floftyfood.ru%2F&amp;client_id=14172408775.2637076670294"
+      href="https://slack.com/openid/connect/authorize?scope=openid%20profile%20email&amp;response_type=code&amp;redirect_uri=https%3A%2F%2Floftyfood.ru%2F&amp;client_id=14172408775.2637076670294"
       style="
         align-items: center;
         color: #fff !important;
-        background-color: #4a154b;
+        background-color: #5E35B1;
         border: 0;
         border-radius: 44px;
         display: inline-flex;
@@ -41,10 +41,13 @@
         ></path></svg
       >Sign in with Slack</a
     >
+    <v-alert type="error" v-if="noAccess" dismissible>{{ noAccess }}</v-alert>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'Auth',
 
@@ -54,6 +57,11 @@ export default {
     } else {
       next();
     }
+  },
+  computed: {
+    ...mapGetters({
+      noAccess: 'user/noAccess',
+    }),
   },
 };
 </script>

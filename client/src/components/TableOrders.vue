@@ -28,8 +28,8 @@
                 class="mr-3 mb-1 mt-1 table-actions show-detail"
                 small
                 color="deep-purple darken-1"
-                v-bind="{...attrsDialog, ...attrsTooltip}"
-                v-on="{...onDialog, ...onTooltip}"
+                v-bind="{ ...attrsDialog, ...attrsTooltip }"
+                v-on="{ ...onDialog, ...onTooltip }"
                 @click="openDialog(item)"
               >
                 <v-icon>list_alt</v-icon>
@@ -66,7 +66,7 @@
 
 <script>
 import TableLoader from '@/components/TableLoader';
-import {mapGetters} from 'vuex';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'TableOrders',
@@ -81,8 +81,7 @@ export default {
     },
   },
   components: {
-
-    TableLoader
+    TableLoader,
   },
   data() {
     return {
@@ -90,6 +89,7 @@ export default {
       currentUser: null,
       foodOrder: [],
       currentDay: new Date().getDay() - 1,
+      currentCreatedAt: '',
     };
   },
   computed: {
@@ -109,16 +109,16 @@ export default {
   methods: {
     getDayOrder(day) {
       this.currentDay = day;
-      this.foodOrder = this.food(this.currentUser, day).filter(item => item)[0];
+      this.foodOrder = this.food(this.currentUser, day, this.currentCreatedAt).filter(item => item)[0];
       if (!this.foodOrder.length)
         this.foodOrder.push('На этот день нет заказов');
     },
     openDialog(item) {
       this.currentUser = item.email;
+      this.currentCreatedAt = item.createdAt.split('.').reverse().join('-');
       this.getDayOrder(this.currentDay);
     },
   },
 };
 </script>
 
-<style scoped></style>
