@@ -20,6 +20,7 @@ export default {
       }
       localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
     },
+
     UPDATE_ORDER_SUM(state, { type, foodData }) {
       if (type === 'add') {
         state.orderSum += foodData.price;
@@ -28,15 +29,19 @@ export default {
       }
       localStorage.setItem('orderSum', state.orderSum);
     },
+
     RESET_CART(state) {
       state.cartItems = [];
       state.orderSum = 0;
       localStorage.removeItem('cartItems');
       localStorage.removeItem('orderSum');
     },
+
   },
   getters: {
-    cartItems: state => state.cartItems,
+    cartItems: state => day => state.cartItems.filter(order => order.day === day),
     finalSum: state => state.orderSum,
+    selectedDays: state => [...new Set(state.cartItems.map(order => order.day))].sort((a, b) => a - b),
+    cartItemsLength: state => state.cartItems.length
   },
 };
