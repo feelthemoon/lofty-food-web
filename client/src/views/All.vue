@@ -3,6 +3,7 @@
     <orders-table
       :table="{ headers: ordersData.headers, data: orders }"
       :loading="loading"
+      @updateOrders="updateOrders"
     ></orders-table>
   </v-main>
 </template>
@@ -54,6 +55,7 @@ export default {
         ],
       },
       loading: true,
+      page: 1
     };
   },
   computed: {
@@ -67,15 +69,18 @@ export default {
       loadUsers: 'table/loadUsersTable',
       loadUser: 'user/getUserInfo',
     }),
+    async updateOrders(page) {
+      console.log(page);
+      this.page = page;
+      await this.loadUsers(this.page);
+    }
   },
   async created() {
     if (!Object.keys(this.user).length) {
       await this.loadUser();
     }
-    await this.loadUsers();
+    await this.loadUsers(this.page);
     this.loading = false;
   },
 };
 </script>
-
-<style scoped></style>
