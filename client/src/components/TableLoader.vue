@@ -1,6 +1,6 @@
 <template>
   <tbody class="desktop">
-    <tr v-for="row in 15" :key="row">
+    <tr v-for="row in 10" :key="row">
       <td v-for="cell in 9" :key="cell">
         <v-skeleton-loader indeterminate type="table-cell"></v-skeleton-loader>
       </td>

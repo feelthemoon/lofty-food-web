@@ -10,6 +10,7 @@ export default {
         data: [],
       },
     },
+    totalCount: null
   },
   mutations: {
     UPDATE_DATA(state, params) {
@@ -39,6 +40,10 @@ export default {
       });
       localStorage.removeItem('food');
     },
+
+    UPDATE_USERS_TOTAL(state, total) {
+      state.totalCount = total;
+    }
   },
   getters: {
     food: state => day => state.table.food[day],
@@ -71,6 +76,7 @@ export default {
             });
         }
       }),
+    totalCount: state => state.totalCount
   },
   actions: {
     async loadTable({ commit, rootGetters, getters }, params) {
@@ -109,13 +115,14 @@ export default {
         console.log(e);
       }
     },
-    async loadUsersTable({ commit, rootGetters }) {
+    async loadUsersTable({ commit, rootGetters }, page) {
       try {
-        const res = await api.usersTable(rootGetters.token);
+        const res = await api.usersTable(rootGetters.token, page);
         commit('UPDATE_DATA', {
           namespace: 'users',
-          data: res.data,
+          data: res.data.orders,
         });
+        commit('UPDATE_USERS_TOTAL', res.data.totalCount);
       } catch (e) {
         console.log(e);
       }
