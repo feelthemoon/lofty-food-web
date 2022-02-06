@@ -5,11 +5,11 @@ import { OrdersService } from './orders.service';
 @Controller()
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
-  @Get('api/all')
+  @Get('api/all/:page')
   async getAllOrders(@Req() req: Request, @Res() res: Response) {
     try {
-      const orders = await this.ordersService.getAllOrders();
-      await res.status(200).json(orders);
+      const response = await this.ordersService.getAllOrders(req.params.page);
+      await res.status(200).json(response);
     } catch (e) {
       console.log(e);
       await res.status(500).json({ message: 'Wrong data' });

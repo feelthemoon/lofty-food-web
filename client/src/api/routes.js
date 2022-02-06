@@ -6,5 +6,5 @@ export default {
   auth: code =>
     `https://slack.com/api/openid.connect.token?client_id=${process.env.VUE_APP_CLIENT_ID}&client_secret=${process.env.VUE_APP_CLIENT_SECRET}&code=${code}`,
   userInfo: token => `api/user`,
-  users: 'api/all',
+  users: page => `api/all/${page}`,
 };

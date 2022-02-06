@@ -24,8 +24,10 @@ export class OrdersService {
     private readonly userService: UsersService,
   ) {}
 
-  async getAll() {
-    return await this.orders.findAll({ raw: true, order: [['createdAt', 'DESC']] });
+  async getAll(page) {
+    const count = await this.orders.count()
+    const orders = await this.orders.findAll({ raw: true, order: [['createdAt', 'DESC']], offset: (page - 1) * 15, limit: 15 });
+    return {orders, count};
   }
   async create(order, user) {
     const foundOrder = await this.orders.findOne({
@@ -80,11 +82,11 @@ export class OrdersService {
       days_sum,
     });
   }
-  async getAllOrders() {
-    const orders = await this.getAll();
+  async getAllOrders(page: string | number) {
+    const {orders, count} = await this.getAll(page);
     for (const order of orders) {
       order.user = await this.userService.find(order.userId);
     }
-    return orders;
+    return {orders, totalCount: count};
   }
 }
