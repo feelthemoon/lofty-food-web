@@ -4,11 +4,11 @@
     mobile-breakpoint="1100"
     class="table-orders"
     :items="table.data"
-    :items-per-page="25"
-    :footer-props="{
-      'items-per-page-options': [10, 15, 20, -1],
-    }"
+    :items-per-page="15"
+    :server-items-length="total"
+    :footer-props="{'disable-items-per-page': true, 'show-first-last-page': true}"
     dense
+    @update:page="$emit('updateOrders', $event)"
   >
     <template #body v-if="loading">
       <table-loader></table-loader>
@@ -38,7 +38,7 @@
             <span>Детали заказа</span>
           </v-tooltip>
         </template>
-        <template v-slot:default="dialog">
+        <template v-slot:default>
           <v-tabs
             :value="currentDay"
             class="mt-5 mb-5"
@@ -88,12 +88,12 @@ export default {
       tabs: ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница'],
       currentUser: null,
       foodOrder: [],
-      currentDay: new Date().getDay() - 1,
+      currentDay: (new Date().getDay() === 0 || new Date().getDay() === 6) ? 0 : new Date().getDay() - 1,
       currentCreatedAt: '',
     };
   },
   computed: {
-    ...mapGetters({ food: 'table/orderFood' }),
+    ...mapGetters({ food: 'table/orderFood', total: 'table/totalCount' }),
     titleDialog() {
       if (this.currentDay === 2 || this.currentDay === 4) {
         return (
