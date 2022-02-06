@@ -2,21 +2,24 @@
   <aside class="cart">
     <h3 class="cart__title">Корзина</h3>
     <div class="cart__items">
-      <v-card
-        elevation="2"
-        shaped
-        class="mt-3 mb-3"
-        v-for="(order, index) in cartItems"
-        :key="index"
-      >
-        <v-card-title>{{ order.title }}</v-card-title>
-        <v-card-subtitle>Категория: {{ order.category }}</v-card-subtitle>
-        <v-card-text class="pt-0">Количество: {{ order.count }}</v-card-text>
-        <v-card-text class="pt-0">Вес: {{ order.weight }}г</v-card-text>
-        <v-card-text class="pt-0">Стоимость: {{ order.cost }}₽</v-card-text>
-      </v-card>
+      <div class="cart__day-section" v-for="day in selectedDays" :key="day">
+        <h2 class="cart__day-title">{{weekDays[day - 1]}}</h2>
+        <v-card
+          elevation="2"
+          shaped
+          class="mt-3 mb-3"
+          v-for="(order, index) in cartItems(day)"
+          :key="index"
+        >
+          <v-card-title>{{ order.title }}</v-card-title>
+          <v-card-subtitle>Категория: {{ order.category }}</v-card-subtitle>
+          <v-card-text class="pt-0">Количество: {{ order.count }}</v-card-text>
+          <v-card-text class="pt-0">Вес: {{ order.weight }}г</v-card-text>
+          <v-card-text class="pt-0">Стоимость: {{ order.cost }}₽</v-card-text>
+        </v-card>
+      </div>
     </div>
-    <footer v-if="cartItems.length" class="cart__footer">
+    <footer v-if="cartItemsLength" class="cart__footer">
       <span>Сумма заказа: {{ finalSum }}₽</span>
       <v-dialog transition="dialog-bottom-transition" max-width="600">
         <template v-slot:activator="{ on, attrs }">
@@ -211,9 +214,16 @@ export default {
       default: () => [],
     },
   },
+  data() {
+    return {
+      weekDays: ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница']
+    }
+  },
   computed: {
     ...mapGetters({
       finalSum: 'cart/finalSum',
+      selectedDays: 'cart/selectedDays',
+      cartItemsLength: 'cart/cartItemsLength'
     }),
   },
 };
