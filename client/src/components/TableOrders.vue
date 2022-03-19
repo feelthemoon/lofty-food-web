@@ -85,10 +85,10 @@ export default {
   },
   data() {
     return {
-      tabs: ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница'],
+      tabs: ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'],
       currentUser: null,
       foodOrder: [],
-      currentDay: (new Date().getDay() === 0 || new Date().getDay() === 6) ? 0 : new Date().getDay() - 1,
+      currentDay: (new Date().getDay() === 0 || new Date().getDay() === 7) ? 0 : new Date().getDay() - 1,
       currentCreatedAt: '',
     };
   },
