@@ -39,7 +39,7 @@ export class OrdersService {
         },
       },
     });
-    const days_sum = foundOrder?.days_sum || new Array(5).fill(0);
+    const days_sum = foundOrder?.days_sum || new Array(6).fill(0);
     const orders: IFood[] = foundOrder?.food || [];
     let final_sum = foundOrder?.final_sum || 0;
 
