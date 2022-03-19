@@ -36,7 +36,7 @@ export default {
             align: 'center',
           },
           {
-            text: 'Заказ(пн, вт, ср, чт, пт), ₽',
+            text: 'Заказ(пн, вт, ср, чт, пт, сб), ₽',
             value: 'days_sum',
           },
           {
