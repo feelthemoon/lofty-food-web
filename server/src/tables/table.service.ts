@@ -33,7 +33,7 @@ export class TableService {
   }
   downloadParams() {
     const parsedTable = xlsx.parse(process.env.OLD_TABLE);
-    const [startRange, endRange] = [parsedTable[0].data[0][1].match(/\d+\.\d+\.\d+/)[0], parsedTable[4].data[0][1].match(/\d+\.\d+\.\d+/)[0]];
+    const [startRange, endRange] = [parsedTable[0].data[0][1].match(/\d+\.\d+\.\d+/)[0], parsedTable[parsedTable.length - 1].data[0][1].match(/\d+\.\d+\.\d+/)[0]];
 
     return ['./data/table.xlsx', `Заказ ${startRange}-${endRange}.xlsx`];
   }
