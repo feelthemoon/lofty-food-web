@@ -12,3 +12,5 @@
 **.crt
 **.key
 
+#logs
+**/*.log
