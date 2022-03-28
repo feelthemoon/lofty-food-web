@@ -7,6 +7,8 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { User } from './models/user.model';
 import { OrderModel } from './models/order.model';
 import { OrdersModule } from './orders/orders.module';
+import { MailModule } from './mail/mail.module';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 @Module({
   imports: [
@@ -27,6 +29,21 @@ import { OrdersModule } from './orders/orders.module';
       autoLoadModels: true,
       models: [User, OrderModel],
     }),
+    MailerModule.forRoot({
+      transport: {
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false, // upgrade later with STARTTLS
+        auth: {
+          user: process.env.MAIL_USERNAME,
+          pass: process.env.MAIL_PASSWORD,
+        },
+      },
+      defaults: {
+        from: '"nest-modules" <modules@nestjs.com>',
+      },
+    }),
+    MailModule.register()
   ],
 })
 export class AppModule {}
