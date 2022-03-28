@@ -89,4 +89,7 @@ export class OrdersService {
     }
     return {orders, totalCount: count};
   }
+  async deleteOrder(id: number) {
+    return await this.orders.destroy({ where: { id }});
+  }
 }

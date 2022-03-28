@@ -1,4 +1,4 @@
-import { Controller, Get, Req, Res } from '@nestjs/common';
+import { Controller, Delete, Get, Req, Res } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { OrdersService } from './orders.service';
 
@@ -13,6 +13,16 @@ export class OrdersController {
     } catch (e) {
       console.log(e);
       await res.status(500).json({ message: 'Wrong data' });
+    }
+  }
+
+  @Delete('api/orders/:id')
+  async deleteOrder(@Req() req: Request, @Res() res: Response) {
+    try {
+      this.ordersService.deleteOrder(+req.params.id);
+      res.status(200).send({});
+    } catch (error) {
+      res.send(error);
     }
   }
 }
